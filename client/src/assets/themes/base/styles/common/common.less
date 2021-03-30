@@ -1,0 +1,40 @@
+@import "./fonts.less";
+@import "./colors.less";
+@import "./mixins.less";
+@import "./normalize.less";
+
+//Variables
+:root {
+    --dfs-heder-height: 45px;
+    --dfs-scrollbar-width: 7px;
+}
+
+* {
+    box-sizing: border-box;
+
+    &:before,
+    &:after {
+        box-sizing: border-box;
+    }
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    .font-regular();
+
+    color: @main;
+    background-color: @main-background-color;
+    user-select: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+._menu-icon {
+    margin-right: 16px;
+    vertical-align: middle;
+}

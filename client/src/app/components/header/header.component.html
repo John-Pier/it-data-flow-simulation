@@ -1,0 +1,23 @@
+<div class="dfs-header__inner">
+    <div class="dfs-header__main-content">
+        <div class="dfs-header__main-label">
+            <ng-template [ngTemplateOutlet]="logoLabelTemplate ? logoLabelTemplate : logoLabelTemplate">
+            </ng-template>
+        </div>
+        <div class="dfs-header__tabs">
+            <div class="dfs-header__tab"
+                 *ngFor="let model of models">
+                <ng-template [ngTemplateOutlet]="tabTemplate"
+                             [ngTemplateOutletContext]="{model: model}">
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div class="dfs-header__right-bar">
+        <template [ngTemplateOutlet]="rightBarTemplate"></template>
+    </div>
+</div>
+
+<ng-template #logoLabelTemplate>
+    <div class="dfs-header__main-label-text">{{logoLabel}}</div>
+</ng-template>

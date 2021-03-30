@@ -1,0 +1,67 @@
+<div class="dfs-main-container__inner"
+     [@flashAnimations]>
+    <div class="dfs-main-container__header">
+<!--        <dfs-header [logoLabel]="'Space Quest'"-->
+<!--                    [tabTemplate]="tabTemplate"-->
+<!--                    [rightBarTemplate]="userInfoTemplate"-->
+<!--                    [models]="_models">-->
+<!--        </dfs-header>-->
+        Test
+    </div>
+    <div class="dfs-main-container__wrapper">
+        <div class="dfs-main-container__wrapper-scroll">
+            <router-outlet></router-outlet>
+            <div class="dfs-main-container__footer">
+                <div class="dfs-main-container__footer-content">
+                    <a href="{{_contactsDataConfig.repoLink}}">{{_contactsDataConfig.repoText}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<ng-template #tabTemplate let-model="model">-->
+<!--    <button mat-button-->
+<!--            disableRipple="true"-->
+<!--            (click)="_navigateTo(model.route)">-->
+<!--        {{model.tabName}}-->
+<!--    </button>-->
+<!--</ng-template>-->
+
+<!--<ng-template #userInfoTemplate>-->
+<!--    <span class="dfs-main-container__header-email">-->
+<!--        {{_username}}-->
+<!--    </span>-->
+<!--    <button mat-icon-button-->
+<!--            aria-label="Меню"-->
+<!--            [matMenuTriggerFor]="menu">-->
+<!--        <mat-icon>more_vert</mat-icon>-->
+<!--    </button>-->
+<!--</ng-template>-->
+
+<!--<mat-menu #menu="matMenu">-->
+<!--    <button mat-menu-item-->
+<!--            (click)="_onNavigateToUserProfileClick()">-->
+<!--        <svg class="_menu-icon"-->
+<!--             width="20px" height="20px">-->
+<!--            <use xlink:href="#icon-person"/>-->
+<!--        </svg>-->
+<!--        <span>Профиль</span>-->
+<!--    </button>-->
+<!--    <button mat-menu-item-->
+<!--            disabled>-->
+<!--        <svg class="_menu-icon"-->
+<!--             width="20px" height="20px" fill="white">-->
+<!--            <use xlink:href="#icon-info"/>-->
+<!--        </svg>-->
+<!--        <span>О приложении</span>-->
+<!--    </button>-->
+<!--    <button mat-menu-item-->
+<!--            (click)="_logoutClick()">-->
+<!--        <svg class="_menu-icon"-->
+<!--             width="20px" height="20px" fill="white">-->
+<!--            <use xlink:href="#icon-exit"/>-->
+<!--        </svg>-->
+<!--        <span>Выйти</span>-->
+<!--    </button>-->
+<!--</mat-menu>-->
