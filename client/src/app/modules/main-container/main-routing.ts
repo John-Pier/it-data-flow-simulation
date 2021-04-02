@@ -2,6 +2,8 @@ import {defaultAbsoluteRoute, DFSRoutesString} from "../../app-routers";
 import {DFSAccessDeniedComponent} from "../../components/access-denied/access-denied.component";
 import {DFSNotFoundComponent} from "../../components/not-found/not-found.component";
 import {Routes} from "@angular/router";
+import {DFSStartPageComponent} from "src/app/modules/settings/components/start-page/start-page.component";
+import {DFSSettingsComponent} from "src/app/modules/settings/components/settings/settings.component";
 
 export const MAIN_ROUTES: Routes = [
     {
@@ -10,15 +12,23 @@ export const MAIN_ROUTES: Routes = [
         redirectTo: defaultAbsoluteRoute
     },
     {
-        path: DFSRoutesString.DFS_NOT_FOUND,
+        path: DFSRoutesString.START_PAGE,
+        component: DFSStartPageComponent
+    },
+    {
+        path: DFSRoutesString.SETTINGS,
+        component: DFSSettingsComponent
+    },
+    {
+        path: DFSRoutesString.NOT_FOUND,
         component: DFSNotFoundComponent
     },
     {
-        path: DFSRoutesString.DFS_ACCESS_DENIED,
+        path: DFSRoutesString.ACCESS_DENIED,
         component: DFSAccessDeniedComponent
     },
     {
         path: "**",
-        redirectTo: DFSRoutesString.DFS_NOT_FOUND
+        redirectTo: DFSRoutesString.NOT_FOUND
     }
 ];

@@ -12,21 +12,21 @@ const gulp = require("gulp"),
 gulp.task("svg", () => {
     let svgs = gulp
         .src("./src/assets/themes/base/images/icons/*.svg")
-        .pipe(svgmin(function (file) {
+        .pipe(svgmin(function(file) {
             let prefix = path.basename(file.relative, path.extname(file.relative));
 
             return {
                 plugins: [
                     {
-                        removeTitle: true
+                        removeTitle: true,
                     },
                     {
                         cleanupIDs: {
                             prefix: prefix + "-",
-                            minify: true
-                        }
-                    }
-                ]
+                            minify: true,
+                        },
+                    },
+                ],
             };
         }))
         .pipe(rename({ prefix: "icon-" }))
@@ -46,13 +46,13 @@ gulp.task("less", () =>
     gulp.src("./dist/*.css")
         .pipe(rev())
         .pipe(rev.manifest())
-        .pipe(gulp.dest("dist/assets"))
+        .pipe(gulp.dest("dist/assets")),
 );
 
 gulp.task("type-replace", () =>
     gulp.src(["dist/index.html"])
         .pipe(replace("type=\"module\"", "type=\"text/javascript\""))
-        .pipe(gulp.dest("dist/"))
+        .pipe(gulp.dest("dist/")),
 );
 
 gulp.task("less:inject", () => {

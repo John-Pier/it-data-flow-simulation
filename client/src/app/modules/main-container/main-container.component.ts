@@ -1,5 +1,5 @@
 import {Component, HostBinding, Inject, OnInit} from "@angular/core";
-import {DFSRoutesMap, DFSRoutesString} from "../../app-routers";
+import {dfsAppRoutesMap, DFSRoutesString} from "../../app-routers";
 import {DFS_CONTACTS_DATA_CONFIG, DFSContactsDataConfig} from "../../app.config";
 import {DFSTabsModel} from "../../components/header/model/tabs.type";
 import {flashAnimations} from "../../core/core.animations";
@@ -28,11 +28,11 @@ export class DFSMainContainerComponent implements OnInit {
         this._models = [
             {
                 tabName: "Главная",
-                route: DFSRoutesMap[DFSRoutesString.DFS_MAIN],
+                route: dfsAppRoutesMap[DFSRoutesString.MAIN],
             },
             {
                 tabName: "Квесты",
-                route: DFSRoutesMap[DFSRoutesString.DFS_MAIN],
+                route: dfsAppRoutesMap[DFSRoutesString.MAIN],
             }
         ];
 

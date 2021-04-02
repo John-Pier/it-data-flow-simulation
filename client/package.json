@@ -6,7 +6,7 @@
         "hmr": "ng serve --configuration hmr -o",
         "server": "tsc-watch --onSuccess \"node ./server/server.js --port 3000\"  --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc -p ./server/",
         "svg": "gulp svg",
-        "start-mock": "npm run svg && ng serve --open --port 4201 --configuration mock",
+        "start-mock": "npm run svg && ng serve --hmr --open --port 4201 --configuration hmr -o",
         "start-local": "npm run svg && ng serve --open --port 4201",
         "build": "ng build --prod --buildOptimizer",
         "build:server": "webpack-dev-server --open --port 3000 --entry /webpack-dev-server --output-path dist/space-quest --compress --content-base dist/space-quest --history-api-fallback",

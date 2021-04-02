@@ -8,6 +8,7 @@ import {DFSHeaderModule} from "../../components/header/header.module";
 import {DFSNotFoundModule} from "../../components/not-found/not-found.module";
 import {DFSMainContainerComponent} from "./main-container.component";
 import {MAIN_ROUTES} from "./main-routing";
+import {DFSSettingsModule} from "src/app/modules/settings/dfssettings.module";
 
 const DFSMainContainerRoutes: Routes = [
     {
@@ -20,7 +21,8 @@ const DFSMainContainerRoutes: Routes = [
 const dfsModules: Type<any>[] = [
     DFSHeaderModule,
     DFSNotFoundModule,
-    DFSAccessDeniedModule
+    DFSAccessDeniedModule,
+    DFSSettingsModule
 ];
 
 const matModules: Type<any>[] = [

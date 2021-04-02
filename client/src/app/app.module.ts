@@ -13,7 +13,7 @@ import {BrowserModule} from "@angular/platform-browser";
 
 export const dfsRoutes: Routes = [
     {
-        path: DFSRoutesString.DFS_MAIN,
+        path: DFSRoutesString.MAIN,
         canActivate: [],
         canActivateChild: [],
         loadChildren: () => import("./modules/main-container/main-container.module").then(m => m.DFSMainContainerModule)
@@ -21,11 +21,11 @@ export const dfsRoutes: Routes = [
     {
         path: "",
         pathMatch: "full",
-        redirectTo: DFSRoutesString.DFS_MAIN
+        redirectTo: DFSRoutesString.MAIN
     },
     {
         path: "**",
-        redirectTo: DFSRoutesString.DFS_MAIN
+        redirectTo: DFSRoutesString.MAIN
     }
 ];
 

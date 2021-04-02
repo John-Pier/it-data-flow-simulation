@@ -73,7 +73,7 @@ export class DFSNavigationHistoryService {
     }
 
     private checkCircleUniqueUrl(url: string): boolean {
-        return !(this.history.length > 1 && this.history[this.history.length - 2] === url)
+        return !(this.history.length > 1 && this.history[this.history.length - 2] === url);
     }
 
     private resetIfOverflowing(): void {
