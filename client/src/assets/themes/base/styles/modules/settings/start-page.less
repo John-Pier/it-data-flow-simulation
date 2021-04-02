@@ -1,0 +1,40 @@
+@import "./../../common/colors.less";
+
+.dfs-start-page {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__title {
+        font-weight: 500;
+        font-size: 38px;
+        text-align: center;
+        margin: 10px 10px 20px;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        margin: 20px;
+
+        input:required::after {
+            content: '*';
+            color: @sample-unknown-21-color;
+        }
+
+        label {
+            margin: 6px 4px;
+        }
+    }
+
+    &__next-button {
+        align-self: flex-end;
+        margin: 20px 4px;
+    }
+}

@@ -1,10 +1,20 @@
-<div>
-    <div class="">Test</div>
-    <div>form</div>
-    <div>
-        <button mat-raised-button
-                (click)="_onNavigateToNextStepClick()">
-            Перейти к настройкам
-        </button>
-    </div>
+<div class="dfs-start-page__wrapper">
+    <div class="dfs-start-page__title">Вас приветствует система симуляции потоков в IT</div>
+    <form class="dfs-start-page__form"
+          [formGroup]="_formGroup">
+        <label> Название организации
+            <input required type="text" formControlName="projectName">
+        </label>
+        <label>Файл с настройками настройки
+            <input type="file" formControlName="configuration">
+        </label>
+        <div class="dfs-start-page__next-button">
+            <button mat-raised-button
+                    type="submit"
+                    [disabled]="_formGroup.invalid"
+                    (click)="_onNavigateToNextStepClick()">
+                Перейти к настройке
+            </button>
+        </div>
+    </form>
 </div>

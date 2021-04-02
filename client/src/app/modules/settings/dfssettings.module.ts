@@ -3,6 +3,7 @@ import {CommonModule} from "@angular/common";
 import {DFSStartPageComponent} from "src/app/modules/settings/components/start-page/start-page.component";
 import {MatButtonModule} from "@angular/material";
 import {DFSSettingsComponent} from "src/app/modules/settings/components/settings/settings.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -11,7 +12,8 @@ import {DFSSettingsComponent} from "src/app/modules/settings/components/settings
     ],
     imports: [
         CommonModule,
-        MatButtonModule
+        MatButtonModule,
+        ReactiveFormsModule
     ],
     exports: [
         DFSStartPageComponent,

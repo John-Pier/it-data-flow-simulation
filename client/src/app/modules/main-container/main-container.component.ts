@@ -26,14 +26,14 @@ export class DFSMainContainerComponent implements OnInit {
 
     public ngOnInit(): void {
         this._models = [
-            {
-                tabName: "Главная",
-                route: dfsAppRoutesMap[DFSRoutesString.MAIN],
-            },
-            {
-                tabName: "Квесты",
-                route: dfsAppRoutesMap[DFSRoutesString.MAIN],
-            }
+            // {
+            //     tabName: "Главная",
+            //     route: dfsAppRoutesMap[DFSRoutesString.MAIN],
+            // },
+            // {
+            //     tabName: "Квесты",
+            //     route: dfsAppRoutesMap[DFSRoutesString.MAIN],
+            // }
         ];
 
     }

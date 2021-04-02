@@ -1,12 +1,11 @@
 <div class="dfs-main-container__inner"
      [@flashAnimations]>
     <div class="dfs-main-container__header">
-<!--        <dfs-header [logoLabel]="'Space Quest'"-->
-<!--                    [tabTemplate]="tabTemplate"-->
-<!--                    [rightBarTemplate]="userInfoTemplate"-->
-<!--                    [models]="_models">-->
-<!--        </dfs-header>-->
-        Test
+        <dfs-header [logoLabel]="'IT Data Flow Simulator'"
+                    [tabTemplate]="tabTemplate"
+                    [rightBarTemplate]="userInfoTemplate"
+                    [models]="_models">
+        </dfs-header>
     </div>
     <div class="dfs-main-container__wrapper">
         <div class="dfs-main-container__wrapper-scroll">
@@ -20,24 +19,20 @@
     </div>
 </div>
 
-<!--<ng-template #tabTemplate let-model="model">-->
-<!--    <button mat-button-->
-<!--            disableRipple="true"-->
-<!--            (click)="_navigateTo(model.route)">-->
-<!--        {{model.tabName}}-->
-<!--    </button>-->
-<!--</ng-template>-->
+<ng-template #tabTemplate let-model="model">
+    <button mat-button
+            disableRipple="true"
+            (click)="_navigateTo(model.route)">
+        {{model.tabName}}
+    </button>
+</ng-template>
 
-<!--<ng-template #userInfoTemplate>-->
-<!--    <span class="dfs-main-container__header-email">-->
-<!--        {{_username}}-->
-<!--    </span>-->
-<!--    <button mat-icon-button-->
-<!--            aria-label="Меню"-->
-<!--            [matMenuTriggerFor]="menu">-->
-<!--        <mat-icon>more_vert</mat-icon>-->
-<!--    </button>-->
-<!--</ng-template>-->
+<ng-template #userInfoTemplate>
+    <button class="dfs-main-container__header-email"
+            mat-button>
+        Помощь
+    </button>
+</ng-template>
 
 <!--<mat-menu #menu="matMenu">-->
 <!--    <button mat-menu-item-->
