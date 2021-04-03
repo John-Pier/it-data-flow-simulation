@@ -4,6 +4,7 @@ import {DFSNotFoundComponent} from "../../components/not-found/not-found.compone
 import {Routes} from "@angular/router";
 import {DFSStartPageComponent} from "src/app/modules/settings/components/start-page/start-page.component";
 import {DFSSettingsComponent} from "src/app/modules/settings/components/settings/settings.component";
+import {DFSFinalSettingsComponent} from "src/app/modules/settings/components/final-settings/final-settings.component";
 
 export const MAIN_ROUTES: Routes = [
     {
@@ -18,6 +19,10 @@ export const MAIN_ROUTES: Routes = [
     {
         path: DFSRoutesString.SETTINGS,
         component: DFSSettingsComponent
+    },
+    {
+        path: DFSRoutesString.FINAL_SETTINGS,
+        component: DFSFinalSettingsComponent
     },
     {
         path: DFSRoutesString.NOT_FOUND,

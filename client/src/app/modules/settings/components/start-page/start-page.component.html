@@ -2,16 +2,18 @@
     <div class="dfs-start-page__title">Вас приветствует система симуляции потоков в IT</div>
     <form class="dfs-start-page__form"
           [formGroup]="_formGroup">
-        <label> Название организации
-            <input required type="text" formControlName="projectName">
-        </label>
-        <label>Файл с настройками настройки
+        <mat-form-field appearance="fill"
+                        floatLabel="Название организации">
+            <input matInput required type="text" placeholder="Название организации" formControlName="projectName">
+        </mat-form-field>
+        <label>
+            <span>Файл с настройками:</span>
             <input type="file" formControlName="configuration">
         </label>
         <div class="dfs-start-page__next-button">
             <button mat-raised-button
                     type="submit"
-                    [disabled]="_formGroup.invalid"
+                    [disabled]="!(_formValid$ | async)"
                     (click)="_onNavigateToNextStepClick()">
                 Перейти к настройке
             </button>

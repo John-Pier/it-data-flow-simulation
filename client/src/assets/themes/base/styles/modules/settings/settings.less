@@ -1,0 +1,33 @@
+.dfs-settings {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    dfs-setting-block {
+        margin: 10px 0;
+    }
+
+    &__nav-buttons {
+        display: flex;
+        flex: 0 1 auto;
+        justify-content: space-between;
+        margin: 10px 0;
+
+        button {
+            margin: 0 10px;
+        }
+    }
+
+    &__departments-settings {
+        display: flex;
+        flex-direction: column;
+
+        mat-checkbox {
+            margin: 4px 0;
+        }
+    }
+
+    ._visible {
+        display: none;
+    }
+}

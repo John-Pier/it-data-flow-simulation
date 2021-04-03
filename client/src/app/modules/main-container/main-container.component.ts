@@ -1,10 +1,8 @@
 import {Component, HostBinding, Inject, OnInit} from "@angular/core";
-import {dfsAppRoutesMap, DFSRoutesString} from "../../app-routers";
 import {DFS_CONTACTS_DATA_CONFIG, DFSContactsDataConfig} from "../../app.config";
 import {DFSTabsModel} from "../../components/header/model/tabs.type";
 import {flashAnimations} from "../../core/core.animations";
 import {DFSNavigationService} from "../../services/navigation.service";
-import {DFSStorageService} from "../../services/storage.service";
 
 @Component({
     selector: "dfs-main-container",

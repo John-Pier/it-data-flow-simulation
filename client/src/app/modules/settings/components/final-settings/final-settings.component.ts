@@ -5,16 +5,16 @@ import {Observable} from "rxjs";
 import {DepartmentsConfig, SettingsConfig} from "src/app/modules/settings/state/settings.store";
 
 @Component({
-    selector: "dfs-settings",
-    templateUrl: "settings.component.html",
+    selector: "dfs-final-settings",
+    templateUrl: "final-settings.component.html",
 })
-export class DFSSettingsComponent implements OnInit {
+export class DFSFinalSettingsComponent implements OnInit {
 
     public _settingsConfig$: Observable<SettingsConfig> = this.settingsService.selectSettingsConfig();
 
     public _departmentsConfig$: Observable<DepartmentsConfig> = this.settingsService.selectDepartmentsConfig();
 
-    @HostBinding("class.dfs-settings")
+    @HostBinding("class.dfs-final-settings")
     private hostClass: boolean = true;
 
     constructor(private navigationService: DFSNavigationService,
