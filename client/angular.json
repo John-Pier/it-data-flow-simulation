@@ -3,11 +3,14 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "space-quest": {
+        "it-data-flow-simulator": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
                     "style": "less"
+                },
+                "@schematics/angular:application": {
+                    "strict": true
                 }
             },
             "root": "",
@@ -78,25 +81,25 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "space-quest:build"
+                        "browserTarget": "it-data-flow-simulator:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "space-quest:build:production"
+                            "browserTarget": "it-data-flow-simulator:build:production"
                         },
                         "hmr": {
                             "hmr": true,
-                            "browserTarget": "space-quest:build:hmr"
+                            "browserTarget": "it-data-flow-simulator:build:hmr"
                         },
                         "mock": {
-                            "browserTarget": "space-quest:build:mock"
+                            "browserTarget": "it-data-flow-simulator:build:mock"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "space-quest:build"
+                        "browserTarget": "it-data-flow-simulator:build"
                     }
                 },
                 "test": {
@@ -134,18 +137,18 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "space-quest:serve"
+                        "devServerTarget": "it-data-flow-simulator:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "space-quest:serve:production"
+                            "devServerTarget": "it-data-flow-simulator:serve:production"
                         }
                     }
                 }
             }
         }
     },
-    "defaultProject": "space-quest",
+    "defaultProject": "it-data-flow-simulator",
     "cli": {
         "analytics": "false"
     }
