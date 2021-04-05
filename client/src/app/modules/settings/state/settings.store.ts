@@ -7,6 +7,7 @@ export type SettingsConfigItem = {
     active: boolean;
     template: string;
     isDepartment: boolean;
+    required?: boolean
 };
 
 export  type DepartmentsConfigItem = {
@@ -51,7 +52,8 @@ export function createInitialState(): SettingsState {
                 title: "Настройка заявок",
                 active: true,
                 template: "requestSettings",
-                isDepartment: false
+                isDepartment: false,
+                required: true
             },
             {
                 id: 1,
@@ -65,7 +67,8 @@ export function createInitialState(): SettingsState {
                 title: "Настройка отдела менеджмента",
                 active: true,
                 template: "managementSettings",
-                isDepartment: true
+                isDepartment: true,
+                required: true
             },
             {
                 id: 3,
@@ -79,7 +82,8 @@ export function createInitialState(): SettingsState {
                 title: "Настройка отдела разработки",
                 active: true,
                 template: "developersSettings",
-                isDepartment: true
+                isDepartment: true,
+                required: true
             },
             {
                 id: 5,

@@ -19,7 +19,7 @@ export class DFSSettingsService {
        return this.query.select(store => store.settingsConfig);
    }
 
-    public selectDepartmentsConfigWithValues(): Observable<(DepartmentsConfigItem | {isSelected: boolean})[]> {
+    public selectDepartmentsConfigWithValues(): Observable<(DepartmentsConfigItem | {isSelected: boolean; required: boolean})[]> {
         return this.query.select([
             store => store.departmentsConfig,
             store => store.settingsConfig
@@ -28,9 +28,11 @@ export class DFSSettingsService {
                 first(),
                 map(([departmentsConfig, settingsConfig]) => {
                     return departmentsConfig.map(value => {
+                        const item = settingsConfig.find(item => item.id === value.settingsConfigId);
                         return {
                             ...value,
-                            isSelected: settingsConfig.find(item => item.id === value.settingsConfigId).active
+                            isSelected: item.active,
+                            required: !!item.required
                         };
                     });
                 })

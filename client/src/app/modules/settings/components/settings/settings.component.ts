@@ -24,7 +24,7 @@ export class DFSSettingsComponent implements OnInit {
 
     public _departmentsConfig$ = this.settingsService.selectDepartmentsConfigWithValues();
 
-    public _requestSettingsFormGroups = this.settingsFormService.getRequestSettingsFormGroups();
+    public _settingsFormGroups = this.settingsFormService.getSettingsFormGroups();
 
     public _distributionsValues = distributionsValues;
 
@@ -40,7 +40,17 @@ export class DFSSettingsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.settingsFormService.subscribeToRequestSettingsFormGroupValues(this._requestSettingsFormGroups)
+        this.settingsFormService.subscribeToRequestSettingsFormGroupValues({
+            responseCustomerStream: this._settingsFormGroups.responseCustomerStream,
+            requestStream: this._settingsFormGroups.requestStream
+        })
+            .pipe(
+                untilDestroyed(this)
+            )
+            .subscribe();
+        this.settingsFormService.subscribeToManagementSettingsFormGroupValues({
+            processingTimeStream: this._settingsFormGroups.processingTimeStream
+        })
             .pipe(
                 untilDestroyed(this)
             )

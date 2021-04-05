@@ -2,9 +2,13 @@
     <div class="dfs-start-page__title">Вас приветствует система симуляции потоков в IT</div>
     <form class="dfs-start-page__form"
           [formGroup]="_formGroup">
-        <mat-form-field appearance="fill"
-                        floatLabel="Название организации">
-            <input matInput required type="text" placeholder="Название организации" formControlName="projectName">
+        <mat-form-field appearance="fill">
+            <mat-label>Название организации</mat-label>
+            <input matInput
+                   required
+                   type="text"
+                   placeholder="Название организации"
+                   formControlName="projectName">
         </mat-form-field>
         <label>
             <span>Файл с настройками:</span>
