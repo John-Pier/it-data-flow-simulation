@@ -2,10 +2,14 @@ import {Component, HostBinding, OnInit} from "@angular/core";
 import {DFSNavigationService} from "src/app/services/navigation.service";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
 import {Observable} from "rxjs";
-import {DepartmentsConfigItem, SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
+import {SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
 import {dfsAppRoutesMap, DFSRoutesString} from "src/app/app-routers";
 import {enterLeaveAnimation, routerAnimations} from "src/app/core/core.animations";
+import {DFSDistributionValue, distributionsValues} from "src/app/core/models/distributions.type";
+import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
+import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
 
+@UntilDestroy()
 @Component({
     selector: "dfs-settings",
     templateUrl: "settings.component.html",
@@ -20,6 +24,10 @@ export class DFSSettingsComponent implements OnInit {
 
     public _departmentsConfig$ = this.settingsService.selectDepartmentsConfigWithValues();
 
+    public _requestSettingsFormGroups = this.settingsFormService.getRequestSettingsFormGroups();
+
+    public _distributionsValues = distributionsValues;
+
     @HostBinding("[@routerAnimations]")
     private animations: boolean = true;
 
@@ -27,10 +35,16 @@ export class DFSSettingsComponent implements OnInit {
     private hostClass: boolean = true;
 
     constructor(private navigationService: DFSNavigationService,
+                private settingsFormService: DFSSettingsFormService,
                 private settingsService: DFSSettingsService) {
     }
 
     public ngOnInit(): void {
+        this.settingsFormService.subscribeToRequestSettingsFormGroupValues(this._requestSettingsFormGroups)
+            .pipe(
+                untilDestroyed(this)
+            )
+            .subscribe();
     }
 
     public _onDepartmentToggle(settingsConfigId: number, checked: boolean) {
@@ -47,5 +61,9 @@ export class DFSSettingsComponent implements OnInit {
 
     public _trackSettingsConfigById(index: number, value: SettingsConfigItem): string {
         return value.id.toString();
+    }
+
+    public _trackValuesById(index: number, value: DFSDistributionValue): string {
+        return value.value;
     }
 }

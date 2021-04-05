@@ -12,6 +12,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
 
 @NgModule({
     declarations: [
@@ -27,7 +30,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         ReactiveFormsModule,
         DFSSittingBlockModule,
         MatInputModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatOptionModule,
+        MatSelectModule
     ],
     exports: [
         DFSStartPageComponent,
@@ -37,7 +42,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     providers: [
         DFSSettingsStore,
         DFSSettingsQuery,
-        DFSSettingsService
+        DFSSettingsService,
+        DFSSettingsFormService
     ]
 })
 export class SettingsModule {}

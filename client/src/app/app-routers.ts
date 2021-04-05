@@ -1,5 +1,3 @@
-import {DFSTypedMap} from "./core/base.types";
-
 export enum DFSRoutesString {
     MAIN = "main",
     NOT_FOUND = "not-found",

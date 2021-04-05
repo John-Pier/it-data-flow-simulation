@@ -27,7 +27,29 @@
         }
     }
 
+    &__request-settings {
+        display: flex;
+        flex: 1 0 auto;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        &-block {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
     ._invisible {
         display: none;
+    }
+
+    ._mat-form {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+    }
+
+    ._mat-form-element {
+        margin-bottom: 1.34375em;
     }
 }

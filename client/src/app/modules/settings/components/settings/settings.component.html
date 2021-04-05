@@ -52,7 +52,66 @@
     </ng-template>
 
     <ng-template #requestSettingsTemplate>
-        test1
+        <div class="dfs-settings__request-settings">
+            <div class="dfs-settings__request-settings-block">
+                Настройка потока заявок
+                <form class="_mat-form"
+                      [formGroup]="_requestSettingsFormGroups.requestStream">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="distribution">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="_mat-form-element"
+                            mat-raised-button
+                            [disabled]="!_requestSettingsFormGroups.requestStream.value['distribution']"
+                            (click)="null">
+                        Задать параметры распределения
+                    </button>
+                    <mat-checkbox formControlName="manualControl"
+                                  [id]="'sadasq3'"
+                                  (change)="null">
+                        Ручное управление
+                    </mat-checkbox>
+                </form>
+            </div>
+            <div class="dfs-settings__request-settings-block">
+                Настройка потока времени ответа заказчика
+                <form class="_mat-form"
+                      [formGroup]="_requestSettingsFormGroups.responseCustomerStream">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="distribution">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="_mat-form-element"
+                            mat-raised-button
+                            [disabled]="!_requestSettingsFormGroups.responseCustomerStream.value['distribution']"
+                            (click)="null">
+                        Задать параметры распределения
+                    </button>
+                    <mat-checkbox formControlName="manualControl"
+                                  [id]="'sadasq3'"
+                                  (change)="null">
+                        Ручное управление
+                    </mat-checkbox>
+                </form>
+            </div>
+        </div>
     </ng-template>
 
     <ng-template #managementSettingsTemplate>
