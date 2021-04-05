@@ -15,7 +15,8 @@
         "target": "es2015",
         "module": "es2020",
         "typeRoots": [
-            "node_modules/@types"
+            "node_modules/@types",
+            "node"
         ],
         "lib": [
             "es2018",
@@ -26,8 +27,6 @@
         "enableI18nLegacyMessageIdFormat": false,
         "strictInjectionParameters": true,
         "strictInputAccessModifiers": true,
-//        "strictTemplates": true
-       // "enableIvy": false
     },
     "include": [
         "./src/**/*"

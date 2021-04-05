@@ -1,8 +1,9 @@
 import {Injectable} from "@angular/core";
-import {DepartmentsConfig, DFSSettingsStore, SettingsConfig, SettingsState} from "src/app/modules/settings/state/settings.store";
+import {DepartmentsConfigItem, DFSSettingsStore, SettingsConfigItem, SettingsState} from "src/app/modules/settings/state/settings.store";
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {arrayUpdate, UpdateStateCallback} from "@datorama/akita";
 import {Observable} from "rxjs";
+import {first, map} from "rxjs/operators";
 
 @Injectable()
 export class DFSSettingsService {
@@ -14,12 +15,26 @@ export class DFSSettingsService {
        this.store.update(updateStateCallback);
    }
 
-   public selectSettingsConfig(): Observable<SettingsConfig> {
+   public selectSettingsConfig(): Observable<SettingsConfigItem[]> {
        return this.query.select(store => store.settingsConfig);
    }
 
-    public selectDepartmentsConfig(): Observable<DepartmentsConfig> {
-        return this.query.select(store => store.departmentsConfig);
+    public selectDepartmentsConfigWithValues(): Observable<(DepartmentsConfigItem | {isSelected: boolean})[]> {
+        return this.query.select([
+            store => store.departmentsConfig,
+            store => store.settingsConfig
+        ])
+            .pipe(
+                first(),
+                map(([departmentsConfig, settingsConfig]) => {
+                    return departmentsConfig.map(value => {
+                        return {
+                            ...value,
+                            isSelected: settingsConfig.find(item => item.id === value.settingsConfigId).active
+                        };
+                    });
+                })
+            );
     }
 
     public setDepartmentActive(settingsConfigId: number, isActive: boolean): void {
@@ -34,6 +49,14 @@ export class DFSSettingsService {
         this.updateState(() => {
             return {
                 projectName: name
+            };
+        });
+    }
+
+    public setFileConfigName(name: string): void {
+        this.updateState(() => {
+            return {
+                fileConfigName: name
             };
         });
     }

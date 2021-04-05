@@ -1,7 +1,7 @@
 import {CommonModule} from "@angular/common";
 import {NgModule} from "@angular/core";
-import {MatButtonModule} from "@angular/material";
 import {DFSPageHeaderComponent} from "./page-header.component";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
     imports: [

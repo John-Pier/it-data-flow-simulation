@@ -2,7 +2,7 @@ import {AfterViewInit, Component, HostBinding, OnInit, QueryList, TemplateRef, V
 import {DFSNavigationService} from "src/app/services/navigation.service";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
 import {Observable} from "rxjs";
-import {DepartmentsConfig, SettingsConfig} from "src/app/modules/settings/state/settings.store";
+import {DepartmentsConfigItem, SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
 
 @Component({
     selector: "dfs-final-settings",
@@ -10,9 +10,9 @@ import {DepartmentsConfig, SettingsConfig} from "src/app/modules/settings/state/
 })
 export class DFSFinalSettingsComponent implements OnInit {
 
-    public _settingsConfig$: Observable<SettingsConfig> = this.settingsService.selectSettingsConfig();
+    public _settingsConfig$: Observable<SettingsConfigItem[]> = this.settingsService.selectSettingsConfig();
 
-    public _departmentsConfig$: Observable<DepartmentsConfig> = this.settingsService.selectDepartmentsConfig();
+    public _departmentsConfig$ = this.settingsService.selectDepartmentsConfigWithValues();
 
     @HostBinding("class.dfs-final-settings")
     private hostClass: boolean = true;

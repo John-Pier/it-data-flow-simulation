@@ -1,25 +1,25 @@
 import {Injectable} from "@angular/core";
 import {Store, StoreConfig} from "@datorama/akita";
 
-export type SettingsConfig = {
+export type SettingsConfigItem = {
     id: number;
     title: string;
     active: boolean;
     template: string;
     isDepartment: boolean;
-}[];
+};
 
-export  type DepartmentsConfig = {
+export  type DepartmentsConfigItem = {
     name: string,
     settingsConfigId: number
-}[];
+};
 
 export interface SettingsState {
     projectName: string;
     fileConfig: Blob;
     fileConfigName: string;
-    settingsConfig: SettingsConfig;
-    departmentsConfig: DepartmentsConfig;
+    settingsConfig: SettingsConfigItem[];
+    departmentsConfig: DepartmentsConfigItem[];
 }
 
 export function createInitialState(): SettingsState {
@@ -50,7 +50,7 @@ export function createInitialState(): SettingsState {
                 id: 0,
                 title: "Настройка заявок",
                 active: true,
-                template: "",
+                template: "requestSettings",
                 isDepartment: false
             },
             {
@@ -64,28 +64,28 @@ export function createInitialState(): SettingsState {
                 id: 2,
                 title: "Настройка отдела менеджмента",
                 active: true,
-                template: "",
+                template: "managementSettings",
                 isDepartment: true
             },
             {
                 id: 3,
                 title: "Настройка отдела дизайна",
                 active: true,
-                template: "",
+                template: "designersSettings",
                 isDepartment: true
             },
             {
                 id: 4,
                 title: "Настройка отдела разработки",
                 active: true,
-                template: "",
+                template: "developersSettings",
                 isDepartment: true
             },
             {
                 id: 5,
                 title: "Настройка отдела поддержки",
                 active: true,
-                template: "",
+                template: "supportSettings",
                 isDepartment: true
             }
         ]
@@ -93,7 +93,7 @@ export function createInitialState(): SettingsState {
 }
 
 @Injectable()
-@StoreConfig({ name: "settings" })
+@StoreConfig({ name: "settingsState" })
 export class DFSSettingsStore extends Store<SettingsState> {
     constructor() {
         super(createInitialState());

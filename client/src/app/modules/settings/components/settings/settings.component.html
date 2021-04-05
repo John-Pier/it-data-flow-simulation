@@ -1,10 +1,26 @@
 <ng-container *ngIf="_settingsConfig$ | async as settingsConfig">
-    <dfs-setting-block *ngFor="let block of settingsConfig"
-                       [class._visible]="block.active"
-                       [title]="block.title">
+    <dfs-setting-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
+                       [class._invisible]="!block.active"
+                       [title]="block.title"
+                       [@enterLeaveAnimation]>
         <ng-container [ngSwitch]="block.template">
             <ng-template *ngSwitchCase="'departmentSettings'"
                          [ngTemplateOutlet]="departmentSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'requestSettings'"
+                         [ngTemplateOutlet]="requestSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'managementSettings'"
+                         [ngTemplateOutlet]="managementSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'designersSettings'"
+                         [ngTemplateOutlet]="designersSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'developersSettings'"
+                         [ngTemplateOutlet]="developersSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'supportSettings'"
+                         [ngTemplateOutlet]="supportSettingsTemplate">
             </ng-template>
             <ng-template *ngSwitchDefault
                          [ngTemplateOutlet]="">
@@ -24,12 +40,38 @@
     </div>
 
     <ng-template #departmentSettingsTemplate>
-        <form class="dfs-settings__departments-settings">
+        <form class="dfs-settings__departments-settings"
+              [@enterLeaveAnimation]>
             <mat-checkbox *ngFor="let value of _departmentsConfig$ | async"
                           [id]="value.settingsConfigId.toString()"
+                          [checked]="value.isSelected"
                           (change)="_onDepartmentToggle(value.settingsConfigId, $event.checked)">
                 {{value.name}}
             </mat-checkbox>
         </form>
+    </ng-template>
+
+    <ng-template #requestSettingsTemplate>
+        test1
+    </ng-template>
+
+    <ng-template #managementSettingsTemplate>
+        test2
+    </ng-template>
+
+    <ng-template #requestSettingsTemplate>
+        test3
+    </ng-template>
+
+    <ng-template #designersSettingsTemplate>
+        test4
+    </ng-template>
+
+    <ng-template #developersSettingsTemplate>
+        test5
+    </ng-template>
+
+    <ng-template #supportSettingsTemplate>
+        test6
     </ng-template>
 </ng-container>
