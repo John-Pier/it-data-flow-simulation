@@ -1,10 +1,26 @@
 <ng-container *ngIf="_settingsConfig$ | async as settingsConfig">
-    <dfs-setting-block *ngFor="let block of settingsConfig"
-                       [class._visible]="block.active"
-                       [title]="block.title">
+    <dfs-setting-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
+                       [class._invisible]="!block.active"
+                       [title]="block.title"
+                       [@enterLeaveAnimation]>
         <ng-container [ngSwitch]="block.template">
             <ng-template *ngSwitchCase="'departmentSettings'"
                          [ngTemplateOutlet]="departmentSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'requestSettings'"
+                         [ngTemplateOutlet]="requestSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'managementSettings'"
+                         [ngTemplateOutlet]="managementSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'designersSettings'"
+                         [ngTemplateOutlet]="designersSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'developersSettings'"
+                         [ngTemplateOutlet]="developersSettingsTemplate">
+            </ng-template>
+            <ng-template *ngSwitchCase="'supportSettings'"
+                         [ngTemplateOutlet]="supportSettingsTemplate">
             </ng-template>
             <ng-template *ngSwitchDefault
                          [ngTemplateOutlet]="">
@@ -12,23 +28,251 @@
         </ng-container>
     </dfs-setting-block>
     <div class="dfs-settings__nav-buttons">
-        <button mat-raised-button
+        <button class="_margin-right"
+                mat-raised-button
                 (click)="_onBackClick()">
             Назад
         </button>
         <button mat-raised-button
-                color="primary">
-            Далее
+                color="primary"
+                (click)="_onNextClick()">
+            Завершить настройку
         </button>
     </div>
 
     <ng-template #departmentSettingsTemplate>
-        <form class="dfs-settings__departments-settings">
+        <form class="dfs-settings__departments-settings"
+              [@enterLeaveAnimation]>
             <mat-checkbox *ngFor="let value of _departmentsConfig$ | async"
                           [id]="value.settingsConfigId.toString()"
-                          (change)="_onDepartmentToggle(value.settingsConfigId, $event.checked)">
+                          [disabled]="true"
+                          [checked]="value.isSelected">
                 {{value.name}}
             </mat-checkbox>
         </form>
+    </ng-template>
+
+    <ng-template #requestSettingsTemplate>
+        <div class="dfs-settings__settings-area">
+            <div class="dfs-settings__settings-area-block _margin-right">
+                Настройка потока заявок
+                <form class="dfs-settings__settings-area-mat-form"
+                      [formGroup]="_settingsFormGroups.requestStream">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="distribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-checkbox formControlName="manualControl"
+                                  [disabled]="true">
+                        Ручное управление
+                    </mat-checkbox>
+                </form>
+            </div>
+            <div class="dfs-settings__settings-area-block">
+                Настройка потока времени ответа заказчика
+                <form class="dfs-settings__settings-area-mat-form"
+                      [formGroup]="_settingsFormGroups.responseCustomerStream">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="distribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #managementSettingsTemplate>
+        <div class="dfs-settings__settings-area">
+            <div class="dfs-settings__settings-area-block _margin-right">
+                Настройка распределения времени обработки заявки
+                <form class="dfs-settings__settings-area-mat-form"
+                      [formGroup]="_settingsFormGroups.processingTimeStream">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="distribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Процент заявок с дизайном</mat-label>
+                        <input matInput
+                               type="number"
+                               [disabled]="true"
+                               placeholder="Процент заявок с дизайном"
+                               formControlName="designNeededPercent">
+                        <span matSuffix>&nbsp; %</span>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="dfs-settings__settings-area-block"></div>
+        </div>
+    </ng-template>
+
+    <ng-template #designersSettingsTemplate>
+        <div class="dfs-settings__settings-area">
+            <form class="dfs-settings__settings-area-mat-form _reverse"
+                  [formGroup]="_settingsFormGroups.designForm">
+                <div class="dfs-settings__settings-area-block _margin-right">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Количество сотрудников</mat-label>
+                        <input matInput
+                               required
+                               type="number"
+                               placeholder="Количество сотрудников"
+                               formControlName="workersCount"
+                               [disabled]="true">
+                    </mat-form-field>
+                    <div class="_margin-bottom">Настройка стоимости разработки дизайна</div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="costsDistribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="dfs-settings__settings-area-block">
+                    <div class="_margin-bottom">Настройка потока доработки дизайна</div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="revisionTimeDistribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Доработка дизайна требуется в </mat-label>
+                        <input matInput
+                               type="number"
+                               placeholder="Процент доработок дизайна"
+                               formControlName="revisionProbability"
+                               [disabled]="true">
+                        <span matSuffix>&nbsp; %</span>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #developersSettingsTemplate>
+        <div class="dfs-settings__settings-area">
+            <form class="dfs-settings__settings-area-mat-form _reverse"
+                  [formGroup]="_settingsFormGroups.developersForm">
+                <div class="dfs-settings__settings-area-block _margin-right">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Количество сотрудников</mat-label>
+                        <input matInput
+                               required
+                               type="number"
+                               placeholder="Количество сотрудников"
+                               formControlName="workersCount"
+                               [disabled]="true">
+                    </mat-form-field>
+                    <div class="_margin-bottom">Настройка стоимости разработки</div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="costsDistribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template #supportSettingsTemplate>
+        <div class="dfs-settings__settings-area">
+            <form class="dfs-settings__settings-area-mat-form _reverse"
+                  [formGroup]="_settingsFormGroups.supportForm">
+                <div class="dfs-settings__settings-area-block _margin-right">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Количество сотрудников</mat-label>
+                        <input matInput
+                               required
+                               type="number"
+                               placeholder="Количество сотрудников"
+                               formControlName="workersCount"
+                               [disabled]="true">
+                    </mat-form-field>
+                    <div class="_margin-bottom">Настройка времени обработки заявки</div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="costsDistribution">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="dfs-settings__settings-area-block _margin-right">
+                    <div class="_margin-bottom">Настройка потока заявок</div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Закон распределения</mat-label>
+                        <mat-select formControlName="requestTimeDistribution"
+                                    [disabled]="true">
+                            <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
+                                        [value]="value.type">
+                                {{value.value}}
+                            </mat-option>
+                            <mat-option [value]="null">
+                                -
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-checkbox formControlName="manualRequestControl"
+                                  [disabled]="true">
+                        Ручная генерация заявок
+                    </mat-checkbox>
+                </div>
+            </form>
+        </div>
     </ng-template>
 </ng-container>

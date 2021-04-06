@@ -10,6 +10,7 @@ import {SettingsModule} from "src/app/modules/settings/settings.module";
 import {RouterModule, Routes} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
+import {DFSHeaderService} from "src/app/services/header.service";
 
 const DFSMainContainerRoutes: Routes = [
     {
@@ -46,7 +47,7 @@ const matModules: Type<any>[] = [
         DFSMainContainerComponent
     ],
     providers: [
-
+        DFSHeaderService
     ]
 })
 export class DFSMainContainerModule {}

@@ -8,6 +8,8 @@ import {enterLeaveAnimation, routerAnimations} from "src/app/core/core.animation
 import {DFSDistributionValue, distributionsValues} from "src/app/core/models/distributions.type";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
+import {DFSHeaderService} from "src/app/services/header.service";
+import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 
 @UntilDestroy()
 @Component({
@@ -34,23 +36,16 @@ export class DFSSettingsComponent implements OnInit {
     @HostBinding("class.dfs-settings")
     private hostClass: boolean = true;
 
-    constructor(private navigationService: DFSNavigationService,
+    constructor(protected query: DFSSettingsQuery,
+                private navigationService: DFSNavigationService,
                 private settingsFormService: DFSSettingsFormService,
+                private headerService: DFSHeaderService,
                 private settingsService: DFSSettingsService) {
     }
 
     public ngOnInit(): void {
-        this.settingsFormService.subscribeToRequestSettingsFormGroupValues({
-            responseCustomerStream: this._settingsFormGroups.responseCustomerStream,
-            requestStream: this._settingsFormGroups.requestStream
-        })
-            .pipe(
-                untilDestroyed(this)
-            )
-            .subscribe();
-        this.settingsFormService.subscribeToManagementSettingsFormGroupValues({
-            processingTimeStream: this._settingsFormGroups.processingTimeStream
-        })
+        this.headerService.setLabel(this.query.getValue().projectName || "Настройка");
+        this.settingsFormService.subscribeSettingsFormGroupsValues(this._settingsFormGroups)
             .pipe(
                 untilDestroyed(this)
             )

@@ -12,6 +12,9 @@ export class DFSHeaderComponent {
     public logoTemplate: TemplateRef<any>;
 
     @Input()
+    public headerTemplate: TemplateRef<any>;
+
+    @Input()
     public logoLabel: string;
 
     @Input()

@@ -2,16 +2,16 @@ import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {combineLatest, Observable} from "rxjs";
-import {debounceTime, map, startWith, tap} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, map, startWith, tap} from "rxjs/operators";
 import {Injectable} from "@angular/core";
 
 export type RequestSettingsFormGroups = Readonly<{
-   requestStream: FormGroup,
-   responseCustomerStream: FormGroup
+    requestStream: FormGroup,
+    responseCustomerStream: FormGroup
 }>;
 
 export type ManagementSettingsFormGroups = Readonly<{
-   processingTimeStream: FormGroup
+    processingTimeStream: FormGroup
 }>;
 
 export type DesignerSettingsFormGroups = Readonly<{
@@ -35,49 +35,20 @@ export type SettingsFormGroups = DesignerSettingsFormGroups &
 @Injectable()
 export class DFSSettingsFormService {
 
-    private valueChangesFn = (formGroup: FormGroup): Observable<any>  => {
-        return  formGroup.valueChanges
-            .pipe(
-                debounceTime(300),
-                tap(value => {
-                    if (!value.distribution) {
-                        formGroup.patchValue({
-                            manualControl: true
-                        });
-                        formGroup.controls.manualControl.disable();
-                    } else if (formGroup.controls.manualControl.disabled) {
-                        formGroup.controls.manualControl.enable();
-                    }
-                }),
-            );
-    }
-
     constructor(protected query: DFSSettingsQuery,
                 private settingsService: DFSSettingsService) {
     }
 
-    public subscribeToRequestSettingsFormGroupValues(formGroups: RequestSettingsFormGroups): Observable<any> {
+    public subscribeSettingsFormGroupsValues(formGroups: SettingsFormGroups): Observable<any> {
         return combineLatest([
-            this.valueChangesFn(formGroups.requestStream),
-            this.valueChangesFn(formGroups.responseCustomerStream),
+            this.selectValueChanges(formGroups.requestStream),
+            this.selectValueChanges(formGroups.supportForm, "revisionTimeDistribution", "manualRequestControl"),
         ])
             .pipe(
-               tap(([requestValue, responseCustomerValue]) => {
-                   // TODO: Set values to store
-               })
-            )
-
-    }
-
-    public subscribeToManagementSettingsFormGroupValues(formGroups: ManagementSettingsFormGroups): Observable<any> {
-        return combineLatest([
-            this.valueChangesFn(formGroups.processingTimeStream),
-        ])
-            .pipe(
-                tap(([processingTimeValue]) => {
+                tap(([requestValue, supportFormValue]) => {
                     // TODO: Set values to store
                 })
-            )
+            );
 
     }
 
@@ -96,64 +67,61 @@ export class DFSSettingsFormService {
             ...this.getManagementSettingsFormGroups(),
             ...this.getDevelopersSettingsFormGroups(),
             ...this.getSupportSettingsFormGroups()
-        }
+        };
     }
 
     public getRequestSettingsFormGroups(): RequestSettingsFormGroups {
         return {
-            requestStream:  new FormGroup({
+            requestStream: new FormGroup({
                 distribution: new FormControl(null),
                 manualControl: new FormControl(true)
             }),
-            responseCustomerStream:  new FormGroup({
+            responseCustomerStream: new FormGroup({
                 distribution: new FormControl(null),
                 manualControl: new FormControl(true)
             })
-        }
+        };
     }
 
     public getManagementSettingsFormGroups(): ManagementSettingsFormGroups {
         return {
-            processingTimeStream:  new FormGroup({
+            processingTimeStream: new FormGroup({
                 distribution: new FormControl(null),
-                manualControl: new FormControl(true),
-                isDesignNeeded: new FormControl(true),
+                sprintTimeDistribution: new FormControl(null),
+                designNeededPercent: new FormControl(100, [Validators.min(0), Validators.max(100)]),
             }),
-        }
+        };
     }
 
     public getDesignerSettingsFormGroups(): DesignerSettingsFormGroups {
         return {
-            designForm:  new FormGroup({
+            designForm: new FormGroup({
                 workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                manualControl: new FormControl(true),
                 costsDistribution: new FormControl(null),
                 revisionTimeDistribution: new FormControl(null),
-                manualRevisionControl: new FormControl(true),
+                revisionProbability: new FormControl(0, [Validators.min(0), Validators.max(100)]),
             }),
-        }
+        };
     }
 
     public getDevelopersSettingsFormGroups(): DevelopersSettingsFormGroups {
         return {
-            developersForm:  new FormGroup({
+            developersForm: new FormGroup({
                 workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                manualControl: new FormControl(true),
                 costsDistribution: new FormControl(null)
             })
-        }
+        };
     }
 
     public getSupportSettingsFormGroups(): SupportSettingsFormGroups {
         return {
-            supportForm:  new FormGroup({
+            supportForm: new FormGroup({
                 workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                manualControl: new FormControl(true),
                 costsDistribution: new FormControl(null),
                 requestTimeDistribution: new FormControl(null),
                 manualRequestControl: new FormControl(true)
             })
-        }
+        };
     }
 
     public getStartPageFormGroup(): FormGroup {
@@ -162,4 +130,22 @@ export class DFSSettingsFormService {
             configuration: new FormControl(this.query.getValue().fileConfigName)
         });
     }
+
+    private selectValueChanges(formGroup: FormGroup, distribution: string = "distribution", manualControl: string = "manualControl"): Observable<any> {
+        return formGroup.valueChanges
+            .pipe(
+                debounceTime(300),
+                distinctUntilChanged((a, b) => a[distribution] === b[distribution]),
+                tap(value => {
+                    if (!value[distribution]) {
+                        formGroup.patchValue({
+                            [manualControl]: true
+                        }, { emitEvent: false });
+                        formGroup.controls[manualControl].disable();
+                    } else if (formGroup.controls[manualControl].disabled) {
+                        formGroup.controls[manualControl].enable();
+                    }
+                }),
+            );
+    };
 }

@@ -3,6 +3,7 @@
     <div class="dfs-main-container__header">
         <dfs-header [logoLabel]="'IT Data Flow Simulator'"
                     [tabTemplate]="tabTemplate"
+                    [headerTemplate]="headerLabelTemplate"
                     [rightBarTemplate]="userInfoTemplate"
                     [models]="_models">
         </dfs-header>
@@ -32,6 +33,10 @@
             mat-button>
         Помощь
     </button>
+</ng-template>
+
+<ng-template #headerLabelTemplate>
+    <div class="dfs-main-container__header-label">{{" > " + (label$ | async)}}</div>
 </ng-template>
 
 <!--<mat-menu #menu="matMenu">-->

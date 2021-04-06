@@ -1,7 +1,9 @@
 <div class="dfs-header__inner">
     <div class="dfs-header__main-content">
         <div class="dfs-header__main-label">
-            <ng-template [ngTemplateOutlet]="logoLabelTemplate ? logoLabelTemplate : logoLabelTemplate">
+            <ng-template [ngTemplateOutlet]="logoTemplate ? logoTemplate : logoLabelTemplate">
+            </ng-template>
+            <ng-template [ngTemplateOutlet]="headerTemplate">
             </ng-template>
         </div>
         <div class="dfs-header__tabs">

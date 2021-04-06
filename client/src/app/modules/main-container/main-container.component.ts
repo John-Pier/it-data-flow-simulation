@@ -3,6 +3,7 @@ import {DFS_CONTACTS_DATA_CONFIG, DFSContactsDataConfig} from "../../app.config"
 import {DFSTabsModel} from "../../components/header/model/tabs.type";
 import {flashAnimations} from "../../core/core.animations";
 import {DFSNavigationService} from "../../services/navigation.service";
+import {DFSHeaderService} from "src/app/services/header.service";
 
 @Component({
     selector: "dfs-main-container",
@@ -13,12 +14,15 @@ import {DFSNavigationService} from "../../services/navigation.service";
 })
 export class DFSMainContainerComponent implements OnInit {
 
+    public label$ = this.headerService.selectLabel();
+
     public _models: DFSTabsModel[];
 
     @HostBinding("class.dfs-main-container")
     private hostClass: boolean = true;
 
     constructor(private navigationService: DFSNavigationService,
+                private headerService: DFSHeaderService,
                 @Inject(DFS_CONTACTS_DATA_CONFIG) public _contactsDataConfig: DFSContactsDataConfig) {
     }
 
