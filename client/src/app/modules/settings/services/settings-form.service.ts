@@ -42,7 +42,7 @@ export class DFSSettingsFormService {
     public subscribeSettingsFormGroupsValues(formGroups: SettingsFormGroups): Observable<any> {
         return combineLatest([
             this.selectValueChanges(formGroups.requestStream),
-            this.selectValueChanges(formGroups.supportForm, "revisionTimeDistribution", "manualRequestControl"),
+            this.selectValueChanges(formGroups.supportForm, "requestTimeDistribution", "manualRequestControl"),
         ])
             .pipe(
                 tap(([requestValue, supportFormValue]) => {

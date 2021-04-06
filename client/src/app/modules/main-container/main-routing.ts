@@ -5,6 +5,7 @@ import {Routes} from "@angular/router";
 import {DFSStartPageComponent} from "src/app/modules/settings/components/start-page/start-page.component";
 import {DFSSettingsComponent} from "src/app/modules/settings/components/settings/settings.component";
 import {DFSFinalSettingsComponent} from "src/app/modules/settings/components/final-settings/final-settings.component";
+import {DFSSManageComponent} from "src/app/modules/manage/manage.component";
 
 export const MAIN_ROUTES: Routes = [
     {
@@ -23,6 +24,10 @@ export const MAIN_ROUTES: Routes = [
     {
         path: DFSRoutesString.FINAL_SETTINGS,
         component: DFSFinalSettingsComponent
+    },
+    {
+        path: DFSRoutesString.MANAGE_PAGE,
+        component: DFSSManageComponent
     },
     {
         path: DFSRoutesString.NOT_FOUND,

@@ -46,4 +46,4 @@ import {DFSSettingsFormService} from "src/app/modules/settings/services/settings
         DFSSettingsFormService
     ]
 })
-export class SettingsModule {}
+export class DFSSettingsModule {}

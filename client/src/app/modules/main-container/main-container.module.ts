@@ -6,11 +6,12 @@ import {DFSHeaderModule} from "../../components/header/header.module";
 import {DFSNotFoundModule} from "../../components/not-found/not-found.module";
 import {DFSMainContainerComponent} from "./main-container.component";
 import {MAIN_ROUTES} from "./main-routing";
-import {SettingsModule} from "src/app/modules/settings/settings.module";
+import {DFSSettingsModule} from "src/app/modules/settings/settings.module";
 import {RouterModule, Routes} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {DFSHeaderService} from "src/app/services/header.service";
+import {DFSManageModule} from "src/app/modules/manage/manage.module";
 
 const DFSMainContainerRoutes: Routes = [
     {
@@ -24,7 +25,8 @@ const dfsModules: Type<any>[] = [
     DFSHeaderModule,
     DFSNotFoundModule,
     DFSAccessDeniedModule,
-    SettingsModule
+    DFSSettingsModule,
+    DFSManageModule
 ];
 
 const matModules: Type<any>[] = [

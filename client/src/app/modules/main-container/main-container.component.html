@@ -5,7 +5,8 @@
                     [tabTemplate]="tabTemplate"
                     [headerTemplate]="headerLabelTemplate"
                     [rightBarTemplate]="userInfoTemplate"
-                    [models]="_models">
+                    [models]="_models"
+        (onHeaderClick)="_onLogoClick()">
         </dfs-header>
     </div>
     <div class="dfs-main-container__wrapper">

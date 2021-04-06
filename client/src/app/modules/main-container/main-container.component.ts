@@ -43,4 +43,8 @@ export class DFSMainContainerComponent implements OnInit {
     public _navigateTo(route: string): void {
         this.navigationService.navigateTo(route);
     }
+
+    public _onLogoClick(): void {
+        this.navigationService.navigateToDefault();
+    }
 }
