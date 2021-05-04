@@ -1,8 +1,8 @@
 <ng-container *ngIf="_settingsConfig$ | async as settingsConfig">
-    <dfs-setting-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
-                       [class._invisible]="!block.active"
-                       [title]="block.title"
-                       [@enterLeaveAnimation]>
+    <dfs-page-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
+                    [class._invisible]="!block.active"
+                    [title]="block.title"
+                    [@enterLeaveAnimation]>
         <ng-container [ngSwitch]="block.template">
             <ng-template *ngSwitchCase="'departmentSettings'"
                          [ngTemplateOutlet]="departmentSettingsTemplate">
@@ -26,7 +26,7 @@
                          [ngTemplateOutlet]="">
             </ng-template>
         </ng-container>
-    </dfs-setting-block>
+    </dfs-page-block>
     <div class="dfs-settings__nav-buttons">
         <button class="_margin-right"
                 mat-raised-button

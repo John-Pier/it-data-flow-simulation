@@ -1,11 +1,12 @@
 import {NgModule} from "@angular/core";
-import {DFSSManageComponent} from "src/app/modules/manage/manage.component";
 import {MatButtonModule} from "@angular/material/button";
+import {DFSPageBlockModule} from "../../components/page-block/sitting-block.module";
+import {DFSSManageComponent} from "./manage.component";
 
 @NgModule({
     imports: [
-        MatButtonModule
-
+        MatButtonModule,
+        DFSPageBlockModule
     ],
     exports: [
         DFSSManageComponent
