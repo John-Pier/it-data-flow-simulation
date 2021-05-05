@@ -2,9 +2,8 @@ import {Component, HostBinding, Input, OnInit} from "@angular/core";
 import {DFSNavigationService} from "../../services/navigation.service";
 
 @Component({
-  selector: "dfs-manage-containers",
-  templateUrl: "./manage-containers.component.html",
-  styleUrls: ["./manage-containers.component.less"]
+    selector: "dfs-manage-containers",
+    templateUrl: "./manage-containers.component.html"
 })
 export class DFSManageContainersComponent implements OnInit {
 
@@ -14,9 +13,9 @@ export class DFSManageContainersComponent implements OnInit {
     @HostBinding("class.dfs-manage-containers")
     private hostClass: boolean = true;
 
-    constructor(private navigationService: DFSNavigationService) { }
+    constructor(private navigationService: DFSNavigationService) {
+    }
 
-  ngOnInit() {
-  }
-
+    ngOnInit() {
+    }
 }

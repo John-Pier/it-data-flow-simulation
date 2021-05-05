@@ -4,7 +4,8 @@ import {DFSManageContainersComponent} from "./manage-container.component";
 
 @NgModule({
     exports: [
-        DFSManageContainersComponent
+        DFSManageContainersComponent,
+        DFSManageBlockComponent
     ],
     declarations: [
         DFSManageContainersComponent,

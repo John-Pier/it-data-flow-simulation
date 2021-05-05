@@ -1,16 +1,19 @@
-@import "../../../../assets/themes/base/styles/common/colors.less";
+@import "../common/colors.less";
 
-.dfs-manage-block {
+.dfs-manage-containers {
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     &__inner {
+        display: flex;
+        flex-grow: 1;
+        flex-flow: row wrap;
+        justify-content: space-between;
         margin: 10px;
         padding: 10px;
         min-height: 20px;
-        border: 1px solid @main-shadow;
         border-radius: 4px;
-        display: flex;
     }
 
     &__title {

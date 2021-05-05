@@ -16,11 +16,11 @@
     <div class="dfs-manage__inner">
         <dfs-page-block [title]="'Основные параметры'">
             <div class="dfs-manage__model-time-block">
-                Модельное время
+                <div>Модельное время: {{"0"}}</div>
                 <div class="dfs-manage__model-time-block">
                     <div>Текущее ускорение: {{"1"}}</div>
                     <div>
-                        <mat-button-toggle-group name="test" aria-label="test">
+                        <mat-button-toggle-group name="time" aria-label="time">
                             <mat-button-toggle value="bold">Замедлить</mat-button-toggle>
                             <mat-button-toggle value="italic">Сбросить</mat-button-toggle>
                             <mat-button-toggle value="underline">Ускорить</mat-button-toggle>
@@ -42,5 +42,19 @@
                 </button>
             </div>
         </dfs-page-block>
+        <dfs-manage-containers [title]="'Мониторинг и управление отделами'">
+            <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
+                test
+            </dfs-manage-block>
+            <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
+                test
+            </dfs-manage-block>
+            <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
+                test
+            </dfs-manage-block>
+            <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
+                test
+            </dfs-manage-block>
+        </dfs-manage-containers>
     </div>
 </ng-container>
