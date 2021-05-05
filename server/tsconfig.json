@@ -2,9 +2,6 @@
     "ts-node": {
         "transpileOnly": true
     },
-    "include": [
-        "./index.ts"
-    ],
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",

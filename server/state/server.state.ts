@@ -1,9 +1,21 @@
 export type ServerState = Readonly<{
     currentSettings: any;
-    state: any
+    simulationStatus: SimulationStatus
+    state: SimulationState,
 }>;
 
-export enum SimulationState {
-    INITIAL,
+export type SimulationState = Readonly<{}>;
 
+export enum SimulationStatus {
+    INITIAL,
+    STARTED,
+    PAUSED
+}
+
+export function createInitialState(): ServerState {
+    return {
+        simulationStatus: SimulationStatus.INITIAL,
+        state: null,
+        currentSettings: null
+    };
 }
