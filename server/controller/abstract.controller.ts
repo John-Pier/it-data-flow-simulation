@@ -1,4 +1,4 @@
-import {RequestHandler, Router} from "express";
+import {Request, Response, Router} from "express";
 
 export abstract class AbstractController {
     protected _router: Router = Router();
@@ -12,19 +12,19 @@ export abstract class AbstractController {
         return this._router;
     }
 
-    protected post(url: string, handler: (Request, Response) => void) {
+    protected post(url: string, handler: (request: Request, response: Response) => void) {
         this.router.post(`${this.baseUrl}/${url}`, handler);
     }
 
-    protected get(url: string, handler: (Request, Response) => void) {
+    protected get(url: string, handler: (request: Request, response: Response) => void) {
         this.router.get(`${this.baseUrl}/${url}`, handler);
     }
 
-    protected put(url: string, handler: (Request, Response) => void) {
+    protected put(url: string, handler: (request: Request, response: Response) => void) {
         this.router.put(`${this.baseUrl}/${url}`, handler);
     }
 
-    protected delete(url: string, handler: (Request, Response) => void) {
+    protected delete(url: string, handler: (request: Request, response: Response) => void) {
         this.router.delete(`${this.baseUrl}/${url}`, handler);
     }
 }

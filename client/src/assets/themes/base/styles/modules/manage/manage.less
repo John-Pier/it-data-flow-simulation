@@ -30,12 +30,22 @@
         flex: 1 1 auto;
     }
 
-    &__model-time-block {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        align-items: center;
-        padding: 4px;
+    &__model-time {
+        &-block {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            align-items: center;
+            padding: 4px;
+
+            & > div {
+                margin: 4px;
+            }
+        }
+
+        &-label {
+            font-weight: 500;
+        }
     }
 
     &__current-block {

@@ -1,7 +1,11 @@
 export type ServerState = Readonly<{
-    currentSettings: any;
+    currentSettings: SettingsState;
     simulationStatus: SimulationStatus
     state: SimulationState,
+}>;
+
+export type SettingsState = Readonly<{
+    departments: string[],
 }>;
 
 export type SimulationState = Readonly<{}>;
@@ -9,7 +13,7 @@ export type SimulationState = Readonly<{}>;
 export enum SimulationStatus {
     INITIAL,
     STARTED,
-    PAUSED
+    PAUSED,
 }
 
 export function createInitialState(): ServerState {

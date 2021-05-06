@@ -27,7 +27,7 @@ export class DFSHeaderComponent {
     public rightBarTemplate: TemplateRef<any>;
 
     @Output()
-    public onHeaderClick = new EventEmitter()
+    public onHeaderClick = new EventEmitter();
 
     @HostBinding("class.dfs-header")
     private hostClass: boolean = true;
