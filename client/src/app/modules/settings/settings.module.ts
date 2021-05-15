@@ -15,6 +15,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
+import {SettingsDateService} from "../../services/data/settings-date.service";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import {DFSSettingsFormService} from "src/app/modules/settings/services/settings
         DFSSettingsStore,
         DFSSettingsQuery,
         DFSSettingsService,
-        DFSSettingsFormService
+        DFSSettingsFormService,
+        SettingsDateService
     ]
 })
 export class DFSSettingsModule {}

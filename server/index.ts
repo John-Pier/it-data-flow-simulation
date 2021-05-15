@@ -4,7 +4,7 @@ import {SettingsController} from "./controller/settings.controller";
 
 const SERVER_PORT = 3000;
 const app = express();
-const uiUrl = "/api/v1";
+const uiUrl = "/api/v/n/1.0/";
 
 export const allowCrossDomain: RequestHandler = (request: Request, response: Response, next: NextFunction) => {
     response.headers.set("Access-Control-Allow-Origin", "*");

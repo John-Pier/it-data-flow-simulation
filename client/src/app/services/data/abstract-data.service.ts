@@ -9,17 +9,12 @@ export const defaultHttpOptions = {
     responseType: "json"
 };
 
-export class DFSDataService {
+export abstract class DFSDataService {
 
-    private resourcesUrl = "image/";
+    protected absoluteAddress: string = `${this.config.PROTOCOL}//${this.config.HOST_NAME}:${this.config.PORT}${this.config.API_ADDRESS}${this.config.API_VERSION}/`;
 
-    constructor(@Inject(DFS_APP_API_CONFIG) protected config: DFSAppAPIConfig,
-                private http: HttpClient) {
-    }
-
-    public getResourcesUrl(): string {
-        // TODO -> refactoring - make service
-        return this.makeURL(this.resourcesUrl) + "?path=";
+    protected constructor(protected config: DFSAppAPIConfig,
+                          protected http: HttpClient) {
     }
 
     public get<T>(address: string, options: any = {}): Observable<T> {
@@ -32,11 +27,7 @@ export class DFSDataService {
         return this.http.post<T>(this.makeURL(address), value, { ...defaultHttpOptions, ...options});
     }
 
-    protected getAbsoluteAddress(): string {
-        return `${this.config.PROTOCOL}//${this.config.HOST_NAME}:${this.config.PORT}${this.config.API_ADDRESS}${this.config.API_VERSION}/`;
-    }
-
     private makeURL(address: string): string {
-        return this.getAbsoluteAddress() + address;
+        return this.absoluteAddress + address;
     }
 }

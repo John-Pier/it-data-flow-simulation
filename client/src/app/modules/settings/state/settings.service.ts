@@ -4,11 +4,13 @@ import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {arrayUpdate, UpdateStateCallback} from "@datorama/akita";
 import {Observable} from "rxjs";
 import {first, map} from "rxjs/operators";
+import {SettingsDateService} from "../../../services/data/settings-date.service";
 
 @Injectable()
 export class DFSSettingsService {
    constructor(protected store: DFSSettingsStore,
-               protected query: DFSSettingsQuery) {
+               protected query: DFSSettingsQuery,
+               protected dateService: SettingsDateService) {
    }
 
    public updateState(updateStateCallback: UpdateStateCallback<SettingsState>): void {
@@ -61,5 +63,9 @@ export class DFSSettingsService {
                 fileConfigName: name
             };
         });
+    }
+
+    public startSimulation(): Observable<any> {
+       return this.dateService.startSimulation(this.query.getValue());
     }
 }
