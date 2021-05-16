@@ -14,7 +14,8 @@ export class SettingsController extends AbstractController {
             const settings: SettingsState = request.body;
             console.log(settings);
             serverService.setupSettings(settings);
-            response.status(404).json({status: "ok"});
+            response.status(200).json({status: "ok"});
+            console.log(response);
         });
     }
 }
