@@ -12,6 +12,7 @@ export class SettingsController extends AbstractController {
     registerPOSTSetSettings(): void {
         this.post("settings", (request: Request, response: Response) => {
             const settings: SettingsState = request.body;
+            console.log(settings);
             serverService.setupSettings(settings);
             response.status(404).json({status: "ok"});
         });

@@ -42,7 +42,10 @@ export class DFSFinalSettingsComponent implements OnInit {
     }
 
     public _onNextClick(): void {
-        this.navigationService.navigateTo(dfsAppRoutesMap[DFSRoutesString.MANAGE_PAGE]);
+        this.settingsService.startSimulation()
+            .subscribe(() => {
+                this.navigationService.navigateTo(dfsAppRoutesMap[DFSRoutesString.MANAGE_PAGE]);
+            });
     }
 
     public _onBackClick(): void {

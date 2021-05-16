@@ -1,27 +1,33 @@
 import {Injectable} from "@angular/core";
-import {DepartmentsConfigItem, DFSSettingsStore, SettingsConfigItem, SettingsState} from "src/app/modules/settings/state/settings.store";
-import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {arrayUpdate, UpdateStateCallback} from "@datorama/akita";
 import {Observable} from "rxjs";
-import {first, map} from "rxjs/operators";
+import {first, map, tap} from "rxjs/operators";
+import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
+import {
+    DepartmentsConfigItem,
+    DFSSettingsStore,
+    SettingsConfigItem,
+    SettingsState
+} from "src/app/modules/settings/state/settings.store";
+import {DataStatus} from "../../../core/models/state.type";
 import {SettingsDateService} from "../../../services/data/settings-date.service";
 
 @Injectable()
 export class DFSSettingsService {
-   constructor(protected store: DFSSettingsStore,
-               protected query: DFSSettingsQuery,
-               protected dateService: SettingsDateService) {
-   }
+    constructor(protected store: DFSSettingsStore,
+                protected query: DFSSettingsQuery,
+                protected dateService: SettingsDateService) {
+    }
 
-   public updateState(updateStateCallback: UpdateStateCallback<SettingsState>): void {
-       this.store.update(updateStateCallback);
-   }
+    public updateState(updateStateCallback: UpdateStateCallback<SettingsState>): void {
+        this.store.update(updateStateCallback);
+    }
 
-   public selectSettingsConfig(): Observable<SettingsConfigItem[]> {
-       return this.query.select(store => store.settingsConfig);
-   }
+    public selectSettingsConfig(): Observable<SettingsConfigItem[]> {
+        return this.query.select(store => store.settingsConfig);
+    }
 
-    public selectDepartmentsConfigWithValues(): Observable<(DepartmentsConfigItem | {isSelected: boolean; required: boolean})[]> {
+    public selectDepartmentsConfigWithValues(): Observable<(DepartmentsConfigItem | { isSelected: boolean; required: boolean })[]> {
         return this.query.select([
             store => store.departmentsConfig,
             store => store.settingsConfig
@@ -42,11 +48,11 @@ export class DFSSettingsService {
     }
 
     public setDepartmentActive(settingsConfigId: number, isActive: boolean): void {
-       this.updateState(state => {
-           return {
-               settingsConfig: arrayUpdate(state.settingsConfig, settingsConfigId, {active: isActive})
-           };
-       });
+        this.updateState(state => {
+            return {
+                settingsConfig: arrayUpdate(state.settingsConfig, settingsConfigId, {active: isActive})
+            };
+        });
     }
 
     public setProjectName(name: string): void {
@@ -66,6 +72,18 @@ export class DFSSettingsService {
     }
 
     public startSimulation(): Observable<any> {
-       return this.dateService.startSimulation(this.query.getValue());
+        this.setLoading(DataStatus.LOADING)
+        return this.dateService.startSimulation(this.query.getValue())
+            .pipe(
+                tap(() => this.setLoading(DataStatus.LOADED))
+            );
+    }
+
+    public setLoading(loadingStatus: DataStatus): void {
+        this.store.update(() => {
+            return {
+                loading: loadingStatus
+            }
+        })
     }
 }
