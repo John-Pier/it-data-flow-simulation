@@ -6,6 +6,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
 import {DFSDetermineComponent} from "./distributions/determine.component";
 import {DFSExponentialComponent} from "./distributions/exponential.component";
+import {DFSNormalComponent} from "./distributions/normal.component";
 
 @NgModule({
     imports:[
@@ -18,11 +19,13 @@ import {DFSExponentialComponent} from "./distributions/exponential.component";
     ],
     declarations: [
         DFSExponentialComponent,
-        DFSDetermineComponent
+        DFSDetermineComponent,
+        DFSNormalComponent
     ],
     exports: [
         DFSExponentialComponent,
-        DFSDetermineComponent
+        DFSDetermineComponent,
+        DFSNormalComponent
     ]
 })
 export class DFSDistributionsPopoversModule {
