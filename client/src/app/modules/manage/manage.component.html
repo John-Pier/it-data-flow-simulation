@@ -44,16 +44,24 @@
         </dfs-page-block>
         <dfs-manage-containers [title]="'Мониторинг и управление отделами'">
             <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
-                test
+                <div>Заявка в обработке: {{1}}</div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел дизайна'">
-                test
+                <div>Число сотрудников (всего / занято): {{1}}</div>
+                <div>Заявка в дизайне: {{1}}</div>
+                <div>Доработка: {{"нет"}}</div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел разработки'">
-                test
+                <div>Число сотрудников (всего / занято): {{1}}</div>
+                <div>Заявка в разработке: {{1}}</div>
             </dfs-manage-block>
-            <dfs-manage-block [title]="'Отдел техподдержки'">
-                test
+            <dfs-manage-block [title]="'Отдел поддержки'">
+                <div>Число сотрудников (всего / занято): {{1}}</div>
+                <div>Заявка в обработке: {{1}}</div>
+                <button mat-raised-button
+                    color="primary">
+                    Сгенерировать заявку
+                </button>
             </dfs-manage-block>
         </dfs-manage-containers>
     </div>

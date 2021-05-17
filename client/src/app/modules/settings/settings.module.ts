@@ -1,5 +1,6 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
+import {MatDialogModule} from "@angular/material/dialog";
 import {DFSStartPageComponent} from "src/app/modules/settings/components/start-page/start-page.component";
 import {DFSSettingsComponent} from "src/app/modules/settings/components/settings/settings.component";
 import {DFSPageBlockModule} from "src/app/components/page-block/sitting-block.module";
@@ -15,6 +16,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
+import {DFSDistributionsPopoversModule} from "../../components/popowers/distributions-popovers.module";
 import {SettingsDateService} from "../../services/data/settings-date.service";
 
 @NgModule({
@@ -33,7 +35,9 @@ import {SettingsDateService} from "../../services/data/settings-date.service";
         MatInputModule,
         MatCheckboxModule,
         MatOptionModule,
-        MatSelectModule
+        MatSelectModule,
+        MatDialogModule,
+        DFSDistributionsPopoversModule
     ],
     exports: [
         DFSStartPageComponent,
