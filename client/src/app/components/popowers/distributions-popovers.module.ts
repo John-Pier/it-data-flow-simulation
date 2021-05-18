@@ -11,6 +11,7 @@ import {DFSPageBlockModule} from "../page-block/sitting-block.module";
 import {DFSDetermineComponent} from "./distributions/determine.component";
 import {DFSExponentialComponent} from "./distributions/exponential.component";
 import {DFSNormalComponent} from "./distributions/normal.component";
+import {DFSUniformComponent} from "./distributions/uniform.component";
 
 @NgModule({
     imports:[
@@ -27,12 +28,14 @@ import {DFSNormalComponent} from "./distributions/normal.component";
     declarations: [
         DFSExponentialComponent,
         DFSDetermineComponent,
-        DFSNormalComponent
+        DFSNormalComponent,
+        DFSUniformComponent
     ],
     exports: [
         DFSExponentialComponent,
         DFSDetermineComponent,
-        DFSNormalComponent
+        DFSNormalComponent,
+        DFSUniformComponent
     ]
 })
 export class DFSDistributionsPopoversModule {
