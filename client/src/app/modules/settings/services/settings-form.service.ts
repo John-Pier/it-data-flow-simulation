@@ -1,9 +1,15 @@
+import {ComponentType} from "@angular/cdk/portal";
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {combineLatest, merge, Observable} from "rxjs";
 import {debounceTime, distinctUntilChanged, map, startWith, tap} from "rxjs/operators";
-import {Injectable} from "@angular/core";
+import {Component, Injectable} from "@angular/core";
+import {DFSDetermineComponent} from "../../../components/popowers/distributions/determine.component";
+import {DFSExponentialComponent} from "../../../components/popowers/distributions/exponential.component";
+import {DFSNormalComponent} from "../../../components/popowers/distributions/normal.component";
+import {DFSUniformComponent} from "../../../components/popowers/distributions/uniform.component";
+import {DFSDistribution} from "../../../core/models/distributions.type";
 import {DFSSettings} from "../../../core/models/settings.type";
 
 export type RequestSettingsFormGroups = Readonly<{
@@ -217,22 +223,14 @@ export class DFSSettingsFormService {
         });
     }
 
-    private selectValueChangesFromManage(formGroup: FormGroup, distribution: string = "distribution", manualControl: string = "manualControl"): Observable<any> {
-        return this.getValueChangesStream(formGroup)
-            .pipe(
-                distinctUntilChanged((a, b) => a[distribution] === b[distribution]),
-                tap(value => {
-                    if (!value[distribution]) {
-                        formGroup.patchValue({
-                            [manualControl]: true
-                        }, { emitEvent: false });
-                        formGroup.controls[manualControl].disable();
-                    } else if (formGroup.controls[manualControl].disabled) {
-                        formGroup.controls[manualControl].enable();
-                    }
-                }),
-            );
-    };
+    public getComponent(distributionType: DFSDistribution): ComponentType<any> {
+        switch (distributionType) {
+            case DFSDistribution.DETERMINISTIC: return DFSDetermineComponent;
+            case DFSDistribution.EXPONENTIAL: return DFSExponentialComponent;
+            case DFSDistribution.NORMAL: return DFSNormalComponent;
+            case DFSDistribution.UNIFORM: return DFSUniformComponent;
+        }
+    }
 
     public getValueChangesStream(formGroup: FormGroup): Observable<any> {
         return formGroup.valueChanges

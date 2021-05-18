@@ -1,15 +1,16 @@
 import {Component, HostBinding, OnInit} from "@angular/core";
-import {DFSNavigationService} from "src/app/services/navigation.service";
-import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
+import {MatDialog} from "@angular/material/dialog";
+import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {Observable} from "rxjs";
-import {SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
 import {dfsAppRoutesMap, DFSRoutesString} from "src/app/app-routers";
 import {enterLeaveAnimation, routerAnimations} from "src/app/core/core.animations";
-import {DFSDistributionValue, distributionsValues} from "src/app/core/models/distributions.type";
-import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
+import {DFSDistribution, DFSDistributionValue, distributionsValues} from "src/app/core/models/distributions.type";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
-import {DFSHeaderService} from "src/app/services/header.service";
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
+import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
+import {SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
+import {DFSHeaderService} from "src/app/services/header.service";
+import {DFSNavigationService} from "src/app/services/navigation.service";
 
 @UntilDestroy()
 @Component({
@@ -37,6 +38,7 @@ export class DFSSettingsComponent implements OnInit {
     private hostClass: boolean = true;
 
     constructor(protected query: DFSSettingsQuery,
+                public dialog: MatDialog,
                 private navigationService: DFSNavigationService,
                 private settingsFormService: DFSSettingsFormService,
                 private headerService: DFSHeaderService,
@@ -73,7 +75,7 @@ export class DFSSettingsComponent implements OnInit {
     }
 
     public _updateRequestTimeDistributionValue(): void {
-
+        this.dialog.open(this.settingsFormService.getComponent(DFSDistribution.UNIFORM));
     }
 
     public _setRequestTimeDistributionParams(): void {
