@@ -117,7 +117,7 @@ export class DFSSettingsFormService {
         return {
             supportForm: new FormGroup({
                 workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                costsDistribution: new FormControl(null),
+                supportProcessingTimeDistribution: new FormControl(null),
                 requestTimeDistribution: new FormControl(null),
                 manualRequestControl: new FormControl(true)
             })

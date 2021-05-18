@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Store, StoreConfig} from "@datorama/akita";
+import {DFSSettings} from "../../../core/models/settings.type";
 import {DataStatus, LoadingState} from "../../../core/models/state.type";
 
 export type SettingsConfigItem = {
@@ -22,6 +23,7 @@ export interface SettingsState {
     fileConfigName: string;
     settingsConfig: SettingsConfigItem[];
     departmentsConfig: DepartmentsConfigItem[];
+    settings: DFSSettings
 }
 
 export function createInitialState(): SettingsState & LoadingState {
@@ -94,6 +96,7 @@ export function createInitialState(): SettingsState & LoadingState {
                 isDepartment: true
             }
         ],
+        settings: null,
         loading: DataStatus.INITIAL
     };
 }

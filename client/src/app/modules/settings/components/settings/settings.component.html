@@ -281,7 +281,7 @@
                     </mat-form-field>
                     <button class="_margin-bottom"
                             mat-raised-button
-                            [disabled]="!_settingsFormGroups.supportForm.value['costsDistribution']"
+                            [disabled]="!_settingsFormGroups.supportForm.value['supportProcessingTimeDistribution']"
                             (click)="null">
                         Задать параметры распределения
                     </button>
@@ -290,7 +290,8 @@
                     <div class="_margin-bottom">Настройка потока заявок</div>
                     <mat-form-field appearance="fill">
                         <mat-label>Закон распределения</mat-label>
-                        <mat-select formControlName="requestTimeDistribution">
+                        <mat-select formControlName="requestTimeDistribution"
+                                    (valueChange)="_updateRequestTimeDistributionValue($event)">
                             <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
                                         [value]="value.type">
                                 {{value.value}}
@@ -303,7 +304,7 @@
                     <button class="_margin-bottom"
                             mat-raised-button
                             [disabled]="!_settingsFormGroups.supportForm.value['requestTimeDistribution']"
-                            (click)="null">
+                            (click)="_setRequestTimeDistributionParams()">
                         Задать параметры распределения
                     </button>
                     <mat-checkbox formControlName="manualRequestControl">

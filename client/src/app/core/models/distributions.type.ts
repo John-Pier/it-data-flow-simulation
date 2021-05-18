@@ -1,3 +1,19 @@
+export type DFSDistributionEntity = Readonly<{
+    type: DFSDistribution,
+}> & (DFSDeterminedDistributionParams | DFSExponentialDistributionParams | DFSNormalDistributionParams);
+
+export type DFSDeterminedDistributionParams = Readonly<{
+    value: number;
+}>;
+
+export type DFSExponentialDistributionParams = Readonly<{
+    value: number;
+}>;
+
+export type DFSNormalDistributionParams = Readonly<{
+    value: number;
+    variance: number;
+}>;
 
 export enum DFSDistribution {
     DETERMINISTIC = "deterministic",
