@@ -72,12 +72,8 @@ export class DFSSettingsComponent implements OnInit {
         return value.value;
     }
 
-    public _updateRequestTimeDistributionValue($event: string): void {
-        this.settingsService.updateState(() => {
-            return {
-                departmentsConfig: null
-            }
-        })
+    public _updateRequestTimeDistributionValue(): void {
+
     }
 
     public _setRequestTimeDistributionParams(): void {

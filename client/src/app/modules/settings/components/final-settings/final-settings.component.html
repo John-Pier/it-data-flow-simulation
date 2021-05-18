@@ -57,7 +57,7 @@
             <div class="dfs-settings__settings-area-block _margin-right">
                 Настройка потока заявок
                 <form class="dfs-settings__settings-area-mat-form"
-                      [formGroup]="_settingsFormGroups.requestStream">
+                      [formGroup]="_settingsFormGroups.requestForm">
                     <mat-form-field appearance="fill">
                         <mat-label>Закон распределения</mat-label>
                         <mat-select formControlName="distribution"
@@ -80,7 +80,7 @@
             <div class="dfs-settings__settings-area-block">
                 Настройка потока времени ответа заказчика
                 <form class="dfs-settings__settings-area-mat-form"
-                      [formGroup]="_settingsFormGroups.responseCustomerStream">
+                      [formGroup]="_settingsFormGroups.responseCustomerForm">
                     <mat-form-field appearance="fill">
                         <mat-label>Закон распределения</mat-label>
                         <mat-select formControlName="distribution"
@@ -104,7 +104,7 @@
             <div class="dfs-settings__settings-area-block _margin-right">
                 Настройка распределения времени обработки заявки
                 <form class="dfs-settings__settings-area-mat-form"
-                      [formGroup]="_settingsFormGroups.processingTimeStream">
+                      [formGroup]="_settingsFormGroups.processingTimeForm">
                     <mat-form-field appearance="fill">
                         <mat-label>Закон распределения</mat-label>
                         <mat-select formControlName="distribution"
@@ -241,7 +241,7 @@
                     <div class="_margin-bottom">Настройка времени обработки заявки</div>
                     <mat-form-field appearance="fill">
                         <mat-label>Закон распределения</mat-label>
-                        <mat-select formControlName="costsDistribution">
+                        <mat-select formControlName="supportProcessingTimeDistribution">
                             <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
                                         [value]="value.type">
                                 {{value.value}}

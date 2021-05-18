@@ -1,12 +1,13 @@
+import {Optional} from "@angular/core";
 import {DFSDistributionEntity} from "./distributions.type";
 
 export type DFSSettings = Readonly<{}> &
     DFSDepartmentsSettings &
     DFSRequestSettings &
     DFSManagementSettings &
-    DFSDesignersSettings &
+    Partial<DFSDesignersSettings> &
     DFSDevelopersSettings &
-    DFSSupportSettings;
+    Partial<DFSSupportSettings>;
 
 export type DFSDepartmentsSettings = Readonly<{
     departments: string[];

@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Store, StoreConfig} from "@datorama/akita";
+import {DFSDistributionEntity} from "../../../core/models/distributions.type";
 import {DFSSettings} from "../../../core/models/settings.type";
 import {DataStatus, LoadingState} from "../../../core/models/state.type";
 
@@ -96,7 +97,17 @@ export function createInitialState(): SettingsState & LoadingState {
                 isDepartment: true
             }
         ],
-        settings: null,
+        settings: {
+            departments: [],
+            designNeededPercent: 100,
+            designerWorkersCount: 1,
+            processingTimeDistribution: null,
+            requestDistribution: null,
+            responseCustomerDistribution: null,
+            requestManualControl: true,
+            developerWorkersCount: 1,
+            developCostsDistribution: null
+        },
         loading: DataStatus.INITIAL
     };
 }

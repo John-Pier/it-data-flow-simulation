@@ -1,17 +1,18 @@
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {combineLatest, Observable} from "rxjs";
+import {combineLatest, merge, Observable} from "rxjs";
 import {debounceTime, distinctUntilChanged, map, startWith, tap} from "rxjs/operators";
 import {Injectable} from "@angular/core";
+import {DFSSettings} from "../../../core/models/settings.type";
 
 export type RequestSettingsFormGroups = Readonly<{
-    requestStream: FormGroup,
-    responseCustomerStream: FormGroup
+    requestForm: FormGroup,
+    responseCustomerForm: FormGroup
 }>;
 
 export type ManagementSettingsFormGroups = Readonly<{
-    processingTimeStream: FormGroup
+    processingTimeForm: FormGroup
 }>;
 
 export type DesignerSettingsFormGroups = Readonly<{
@@ -40,16 +41,103 @@ export class DFSSettingsFormService {
     }
 
     public subscribeSettingsFormGroupsValues(formGroups: SettingsFormGroups): Observable<any> {
-        return combineLatest([
-            this.selectValueChanges(formGroups.requestStream),
-            this.selectValueChanges(formGroups.supportForm, "requestTimeDistribution", "manualRequestControl"),
+        return merge([
+            this.getValueChangesStream(formGroups.requestForm)
+                .pipe(
+                   map(value => {
+                       return {
+                           requestManualControl: value.manualControl,
+                           requestDistribution: {
+                               ...this.query.getValue().settings.requestDistribution,
+                               type: value.distribution
+                           }
+                       } as Partial<DFSSettings>;
+                   })
+                ),
+            this.getValueChangesStream(formGroups.responseCustomerForm)
+                .pipe(
+                    map(value => {
+                        return {
+                            responseCustomerDistribution: {
+                                ...this.query.getValue().settings.responseCustomerDistribution,
+                                type: value.distribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
+                ),
+            this.getValueChangesStream(formGroups.processingTimeForm)
+                .pipe(
+                    map(value => {
+                        return {
+                            designNeededPercent: value.designNeededPercent ?? 0,
+                            processingTimeDistribution: {
+                                ...this.query.getValue().settings.processingTimeDistribution,
+                                type: value.distribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
+                ),
+            this.getValueChangesStream(formGroups.designForm)
+                .pipe(
+                    map(value => {
+                        return {
+                            designerWorkersCount: value.workersCount,
+                            revisionProbability: value.revisionProbability ?? 0,
+                            developCostsDistribution: {
+                                ...this.query.getValue().settings.designCostsDistribution,
+                                type: value.costsDistribution
+                            },
+                            revisionTimeDistribution: {
+                                ...this.query.getValue().settings.revisionTimeDistribution,
+                                type: value.revisionTimeDistribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
+                ),
+            this.getValueChangesStream(formGroups.developersForm)
+                .pipe(
+                    map(value => {
+                        return {
+                            developerWorkersCount: value.workersCount,
+                            developCostsDistribution: {
+                                ...this.query.getValue().settings.developCostsDistribution,
+                                type: value.costsDistribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
+                ),
+            this.getValueChangesStream(formGroups.supportForm)
+                .pipe(
+                    map(value => {
+                        return {
+                            supportWorkersCount: value.workersCount,
+                            supportManualControl: value.manualControl,
+                            supportProcessingTimeDistribution: {
+                                ...this.query.getValue().settings.supportProcessingTimeDistribution,
+                                type: value.supportProcessingTimeDistribution
+                            },
+                            requestTimeDistribution: {
+                                ...this.query.getValue().settings.requestTimeDistribution,
+                                type: value.requestTimeDistribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
+                ),
         ])
             .pipe(
-                tap(([requestValue, supportFormValue]) => {
-                    // TODO: Set values to store
+                debounceTime(300),
+                tap(console.log),
+                tap((value) => {
+                    this.settingsService.updateState(state => {
+                        return {
+                            settings: {
+                                ...state,
+                               ...value
+                            }
+                        }
+                    });
                 })
             );
-
     }
 
     public selectStartPageFormGroupValid(formGroup: FormGroup): Observable<boolean> {
@@ -72,22 +160,20 @@ export class DFSSettingsFormService {
 
     public getRequestSettingsFormGroups(): RequestSettingsFormGroups {
         return {
-            requestStream: new FormGroup({
+            requestForm: new FormGroup({
                 distribution: new FormControl(null),
                 manualControl: new FormControl(true)
             }),
-            responseCustomerStream: new FormGroup({
+            responseCustomerForm: new FormGroup({
                 distribution: new FormControl(null),
-                manualControl: new FormControl(true)
             })
         };
     }
 
     public getManagementSettingsFormGroups(): ManagementSettingsFormGroups {
         return {
-            processingTimeStream: new FormGroup({
+            processingTimeForm: new FormGroup({
                 distribution: new FormControl(null),
-                sprintTimeDistribution: new FormControl(null),
                 designNeededPercent: new FormControl(100, [Validators.min(0), Validators.max(100)]),
             }),
         };
@@ -131,10 +217,9 @@ export class DFSSettingsFormService {
         });
     }
 
-    private selectValueChanges(formGroup: FormGroup, distribution: string = "distribution", manualControl: string = "manualControl"): Observable<any> {
-        return formGroup.valueChanges
+    private selectValueChangesFromManage(formGroup: FormGroup, distribution: string = "distribution", manualControl: string = "manualControl"): Observable<any> {
+        return this.getValueChangesStream(formGroup)
             .pipe(
-                debounceTime(300),
                 distinctUntilChanged((a, b) => a[distribution] === b[distribution]),
                 tap(value => {
                     if (!value[distribution]) {
@@ -148,4 +233,9 @@ export class DFSSettingsFormService {
                 }),
             );
     };
+
+    public getValueChangesStream(formGroup: FormGroup): Observable<any> {
+        return formGroup.valueChanges
+            .pipe(debounceTime(300));
+    }
 }

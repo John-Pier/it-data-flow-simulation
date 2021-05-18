@@ -1,18 +1,28 @@
-export type DFSDistributionEntity = Readonly<{
-    type: DFSDistribution,
-}> & (DFSDeterminedDistributionParams | DFSExponentialDistributionParams | DFSNormalDistributionParams);
+export type DFSDistributionEntity = DFSDeterminedDistributionParams |
+    DFSExponentialDistributionParams |
+    DFSNormalDistributionParams |
+    DFSUniformDistributionParams | null;
 
 export type DFSDeterminedDistributionParams = Readonly<{
+    type: DFSDistribution.DETERMINISTIC
     value: number;
 }>;
 
 export type DFSExponentialDistributionParams = Readonly<{
+    type: DFSDistribution.EXPONENTIAL
     value: number;
 }>;
 
 export type DFSNormalDistributionParams = Readonly<{
+    type: DFSDistribution.NORMAL
     value: number;
     variance: number;
+}>;
+
+export type DFSUniformDistributionParams = Readonly<{
+    type: DFSDistribution.UNIFORM
+    min: number;
+    max: number;
 }>;
 
 export enum DFSDistribution {
@@ -27,7 +37,7 @@ export type DFSDistributionValue = {
     value: string
 }
 
-export const distributionsValues: DFSDistributionValue[]  = [
+export const distributionsValues: DFSDistributionValue[] = [
     {
         type: DFSDistribution.DETERMINISTIC,
         value: "Детерминированный"
