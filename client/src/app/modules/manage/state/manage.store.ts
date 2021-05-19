@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Store, StoreConfig} from "@datorama/akita";
+import {DepartmentsType} from "../../../core/models/departments.type";
 import {DFSSimulationState} from "../../../core/models/manage.type";
 import {DFSSettings} from "../../../core/models/settings.type";
 import {DataStatus, LoadingState} from "../../../core/models/state.type";
@@ -13,7 +14,27 @@ export interface ManageState {
 export function createInitialState(): ManageState & LoadingState {
     return {
         projectName: null,
-        simulationState: null,
+        simulationState: {
+            state: "run",
+            departmentsParams: {
+                [DepartmentsType.DESIGNERS]: {
+                    workersCount: 2,
+                    employedWorkersCount: 0
+                },
+                [DepartmentsType.DEVELOPERS]: {
+                    workersCount: 4,
+                    employedWorkersCount: 3
+                },
+                [DepartmentsType.SUPPORT]: {
+                    workersCount: 1,
+                    employedWorkersCount: 0
+                },
+                [DepartmentsType.MANAGE]: {
+                }
+            },
+            modelTime: 12,
+            timeAcceleration: 1
+        },
         settings: {
             departments: [],
             designNeededPercent: 100,

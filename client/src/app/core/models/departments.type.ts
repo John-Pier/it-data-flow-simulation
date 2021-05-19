@@ -6,5 +6,6 @@ export enum DepartmentsType {
 }
 
 export type DFSDepartmentsParams = Readonly<{
-
+    workersCount?: number,
+    employedWorkersCount?: number
 }>;

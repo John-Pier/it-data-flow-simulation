@@ -1,3 +1,4 @@
+import {CommonModule} from "@angular/common";
 import {NgModule} from "@angular/core";
 import {MatButtonModule} from "@angular/material/button";
 import {DFSManageContainersModule} from "../../components/manage-containers/manage-containers.module";
@@ -14,7 +15,8 @@ import {DFSManageStore} from "./state/manage.store";
         MatButtonModule,
         DFSPageBlockModule,
         MatButtonToggleModule,
-        DFSManageContainersModule
+        DFSManageContainersModule,
+        CommonModule
     ],
     exports: [
         DFSSManageComponent

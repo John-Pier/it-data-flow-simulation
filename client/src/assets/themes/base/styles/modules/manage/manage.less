@@ -1,3 +1,5 @@
+@import "../../common/colors.less";
+
 .dfs-manage {
     display: flex;
     flex-direction: column;
@@ -12,6 +14,12 @@
         &-label {
             font-size: 28px;
             margin: 10px;
+
+            &-status {
+                font-size: 25px;
+                font-weight: 450;
+                color: @light-main;
+            }
         }
 
         &-buttons {
@@ -61,5 +69,13 @@
         flex-direction: column;
         flex: 1;
         padding: 4px;
+    }
+
+    &__block-field {
+        margin-bottom: 4px;
+
+        &-value {
+            font-weight: 500;
+        }
     }
 }

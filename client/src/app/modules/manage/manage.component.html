@@ -1,26 +1,43 @@
 <ng-container>
     <div class="dfs-manage__header">
-        <div class="dfs-manage__header-label">Управление симуляцией</div>
-        <div class="dfs-manage__header-buttons">
+        <div class="dfs-manage__header-label">
+            Управление симуляцией
+            <span class="dfs-manage__header-label-status">[{{(simulationStatus$ | async)}}]</span>
+        </div>
+        <div class="dfs-manage__header-buttons"
+             *ngIf="(simulationState$ | async) as simulationState">
             <button class="_margin-right"
                     mat-raised-button
-                    color="warn">
+                    color="warn"
+                    [disabled]="simulationState.state === 'stop'"
+                    (click)="_onStopSimulationClick()">
                 Завершить
             </button>
-            <button mat-raised-button
-                    color="accent">
-                Пауза
+            <button *ngIf="simulationState.state !== 'stop'"
+                    mat-raised-button
+                    color="accent"
+                    (click)="_onChangeSimulationState()">
+                {{(simulationState$ | async).state === "run" ? "Пауза" : "Продолжить"}}
+            </button>
+            <button *ngIf="simulationState.state === 'stop'"
+                    mat-raised-button
+                    color="accent"
+                    (click)="_onExitClick()">
+                Выйти
             </button>
         </div>
     </div>
-    <div class="dfs-manage__inner">
+    <div class="dfs-manage__inner"
+         *ngIf="(simulationState$ | async) as simulationState">
         <dfs-page-block [title]="'Основные параметры'">
             <div class="dfs-manage__model-time-block">
                 <div class="dfs-manage__model-time-label">Модельное время: {{"0"}}</div>
                 <div class="dfs-manage__model-time-block">
                     <div>Текущее ускорение: {{"1"}}</div>
                     <div>
-                        <mat-button-toggle-group name="time" aria-label="time">
+                        <mat-button-toggle-group name="time"
+                                                 aria-label="time"
+                                                 [disabled]="simulationState.state !== 'run'">
                             <mat-button-toggle value="bold">Замедлить</mat-button-toggle>
                             <mat-button-toggle value="italic">Сбросить</mat-button-toggle>
                             <mat-button-toggle value="underline">Ускорить</mat-button-toggle>
@@ -37,32 +54,64 @@
             <div class="dfs-manage__buttons-block">
                 <button class="_margin-right"
                         mat-raised-button
-                        color="primary">
+                        color="primary"
+                        [disabled]="simulationState.state !== 'run'"
+                        (click)="_onGenerateRequest()">
                     Сгенерировать заявку
                 </button>
             </div>
         </dfs-page-block>
         <dfs-manage-containers [title]="'Мониторинг и управление отделами'">
             <dfs-manage-block [title]="'Отдел менеджмента и обработки заявок'">
-                <div>Заявка в обработке: {{1}}</div>
+                <div class="dfs-manage__block-field">Заявка в обработке:
+                    <span class="dfs-manage__block-field-value">{{1}}</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел дизайна'">
-                <div>Число сотрудников (всего / занято): {{1}}</div>
-                <div>Заявка в дизайне: {{1}}</div>
-                <div>Доработка: {{"нет"}}</div>
+                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                    <span class="dfs-manage__block-field-value">
+                        {{simulationState.departmentsParams.designers.workersCount }}
+                        / {{simulationState.departmentsParams.designers.employedWorkersCount}}
+                    </span>
+                </div>
+                <div class="dfs-manage__block-field">Заявка в дизайне:
+                    <span class="dfs-manage__block-field-value">{{'Отсутствует'}}</span>
+                </div>
+                <div class="dfs-manage__block-field">Доработка:
+                    <span class="dfs-manage__block-field-value">{{"Нет"}}</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел разработки'">
-                <div>Число сотрудников (всего / занято): {{1}}</div>
-                <div>Заявка в разработке: {{1}}</div>
+                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                    <span class="dfs-manage__block-field-value">
+                           {{simulationState.departmentsParams.developers.workersCount }}
+                        / {{simulationState.departmentsParams.developers.employedWorkersCount}}
+                    </span>
+                </div>
+                <div class="dfs-manage__block-field">Заявка в разработке:
+                    <span class="dfs-manage__block-field-value">{{1}}</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел поддержки'">
-                <div>Число сотрудников (всего / занято): {{1}}</div>
-                <div>Заявка в обработке: {{1}}</div>
+                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                    <span class="dfs-manage__block-field-value">
+                           {{simulationState.departmentsParams.support.workersCount }}
+                        / {{simulationState.departmentsParams.support.employedWorkersCount}}
+                    </span>
+                </div>
+                <div class="dfs-manage__block-field">Заявка в обработке:
+                    <span class="dfs-manage__block-field-value">
+                        {{'Отсутствует'}}
+                    </span>
+                </div>
                 <button mat-raised-button
-                    color="primary">
+                        color="primary"
+                        [disabled]="simulationState.state !== 'run'">
                     Сгенерировать заявку
                 </button>
             </dfs-manage-block>
         </dfs-manage-containers>
+        <dfs-page-block [title]="'Статистика работы симуляции'">
+        </dfs-page-block>
     </div>
 </ng-container>
