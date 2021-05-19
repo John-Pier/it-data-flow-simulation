@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {BehaviorSubject} from "rxjs";
 
 @Injectable()
-export class ManageDataService {
+export class DFSManageDataService {
     private dateStateSubject$: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
     constructor() {

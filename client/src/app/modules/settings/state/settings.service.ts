@@ -10,13 +10,13 @@ import {
     SettingsState
 } from "src/app/modules/settings/state/settings.store";
 import {DataStatus} from "../../../core/models/state.type";
-import {SettingsDateService} from "../../../services/data/settings-date.service";
+import {DFSSettingsDataService} from "../../../services/data/settings-data.service";
 
 @Injectable()
 export class DFSSettingsService {
     constructor(protected store: DFSSettingsStore,
                 protected query: DFSSettingsQuery,
-                protected dateService: SettingsDateService) {
+                protected dateService: DFSSettingsDataService) {
     }
 
     public updateState(updateStateCallback: UpdateStateCallback<SettingsState>): void {

@@ -6,7 +6,7 @@ import {SettingsState} from "../../modules/settings/state/settings.store";
 import {DFSDataService} from "./abstract-data.service";
 
 @Injectable()
-export class SettingsDateService extends DFSDataService {
+export class DFSSettingsDataService extends DFSDataService {
     constructor(@Inject(DFS_APP_API_CONFIG) protected config: DFSAppAPIConfig,
                 protected http: HttpClient) {
         super(config, http);

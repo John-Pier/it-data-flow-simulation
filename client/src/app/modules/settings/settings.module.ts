@@ -17,7 +17,7 @@ import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
 import {DFSDistributionsPopoversModule} from "../../components/popowers/distributions-popovers.module";
-import {SettingsDateService} from "../../services/data/settings-date.service";
+import {DFSSettingsDataService} from "../../services/data/settings-data.service";
 
 @NgModule({
     declarations: [
@@ -49,7 +49,7 @@ import {SettingsDateService} from "../../services/data/settings-date.service";
         DFSSettingsQuery,
         DFSSettingsService,
         DFSSettingsFormService,
-        SettingsDateService
+        DFSSettingsDataService
     ]
 })
 export class DFSSettingsModule {}

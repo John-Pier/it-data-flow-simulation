@@ -1,4 +1,4 @@
-import {Optional} from "@angular/core";
+import {DepartmentsType} from "./departments.type";
 import {DFSDistributionEntity} from "./distributions.type";
 
 export type DFSSettings = Readonly<{}> &
@@ -10,7 +10,7 @@ export type DFSSettings = Readonly<{}> &
     Partial<DFSSupportSettings>;
 
 export type DFSDepartmentsSettings = Readonly<{
-    departments: string[];
+    departments: DepartmentsType[];
 }>;
 
 export type DFSRequestSettings = Readonly<{
