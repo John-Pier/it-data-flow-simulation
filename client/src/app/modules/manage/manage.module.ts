@@ -5,6 +5,9 @@ import {DFSPageBlockModule} from "../../components/page-block/sitting-block.modu
 import {DFSManageDataService} from "../../services/data/manage-data.service";
 import {DFSSManageComponent} from "./manage.component";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {DFSManageQuery} from "./state/manage.query";
+import {DFSManageService} from "./state/manage.service";
+import {DFSManageStore} from "./state/manage.store";
 
 @NgModule({
     imports: [
@@ -20,7 +23,10 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
         DFSSManageComponent
     ],
     providers: [
-        DFSManageDataService
+        DFSManageDataService,
+        DFSManageStore,
+        DFSManageQuery,
+        DFSManageService,
     ]
 })
 export class DFSManageModule {

@@ -3,19 +3,19 @@ import {UpdateStateCallback} from "@datorama/akita";
 import {Observable} from "rxjs";
 import {DFSSimulationState} from "../../../core/models/manage.type";
 import {DFSSettings} from "../../../core/models/settings.type";
-import {DataStatus} from "../../../core/models/state.type";
+import {DataStatus, LoadingState} from "../../../core/models/state.type";
 import {DFSManageDataService} from "../../../services/data/manage-data.service";
 import {DFSManageQuery} from "./manage.query";
 import {DFSManageStore, ManageState} from "./manage.store";
 
 @Injectable()
-export class DFSSettingsService {
+export class DFSManageService {
     constructor(protected store: DFSManageStore,
                 protected query: DFSManageQuery,
                 protected dateService: DFSManageDataService) {
     }
 
-    public updateState(updateStateCallback: UpdateStateCallback<ManageState>): void {
+    public updateState(updateStateCallback: UpdateStateCallback<ManageState & LoadingState>): void {
         this.store.update(updateStateCallback);
     }
 

@@ -6,8 +6,8 @@ import {DataStatus, LoadingState} from "../../../core/models/state.type";
 
 export interface ManageState {
     projectName: string;
-    simulationState: DFSSimulationState,
-    settings: DFSSettings
+    simulationState: DFSSimulationState;
+    settings: DFSSettings;
 }
 
 export function createInitialState(): ManageState & LoadingState {
