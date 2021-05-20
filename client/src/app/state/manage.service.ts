@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {UpdateStateCallback} from "@datorama/akita";
 import {Observable, of} from "rxjs";
 import {tap} from "rxjs/operators";
+import {DFSLoaderService} from "../components/loader/services/loader.service";
 import {DFSSimulationState} from "../core/models/manage.type";
 import {DFSSettings} from "../core/models/settings.type";
 import {DataStatus, LoadingState} from "../core/models/state.type";
@@ -13,6 +14,7 @@ import {DFSManageStore, ManageState} from "./manage.store";
 export class DFSManageService {
     constructor(protected store: DFSManageStore,
                 protected query: DFSManageQuery,
+                public loaderService: DFSLoaderService,
                 protected dateService: DFSManageDataService) {
     }
 

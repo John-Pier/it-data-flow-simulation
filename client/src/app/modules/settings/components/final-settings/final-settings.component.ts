@@ -10,6 +10,7 @@ import {DFSSettingsService} from "src/app/modules/settings/state/settings.servic
 import {SettingsConfigItem} from "src/app/modules/settings/state/settings.store";
 import {DFSHeaderService} from "src/app/services/header.service";
 import {DFSNavigationService} from "src/app/services/navigation.service";
+import {DFSLoaderService} from "../../../../components/loader/services/loader.service";
 import {DFSManageService} from "../../../../state/manage.service";
 
 @UntilDestroy()
@@ -38,6 +39,7 @@ export class DFSFinalSettingsComponent implements OnInit {
                 private settingsFormService: DFSSettingsFormService,
                 private headerService: DFSHeaderService,
                 private manageService: DFSManageService,
+                public loaderService: DFSLoaderService,
                 private settingsService: DFSSettingsService) {
     }
 

@@ -55,7 +55,8 @@ export class DFSSManageComponent implements OnInit {
         this.manageService.asyncInitSimulation()
             .pipe(
                 tap(value => {
-                    this.headerService.setLabel("Симуляция: " + this.query.getValue().projectName);
+                    const projectName = this.query.getValue().projectName;
+                    this.headerService.setLabel(projectName ? "Симуляция: " + projectName : "Симуляция");
                 }),
                 untilDestroyed(this)
             )

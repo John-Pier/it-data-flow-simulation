@@ -3,6 +3,7 @@ import {DFSRoutesString} from "./app-routers";
 import {AppComponent} from "./app.component";
 import {contactsDataConfig, DFS_APP_API_CONFIG, DFS_CONTACTS_DATA_CONFIG} from "./app.config";
 import {DFSLoaderModule} from "./components/loader/loader.module";
+import {DFSManageDataService} from "./services/data/manage-data.service";
 import {DFSNavigationHistoryService} from "./services/navigation-history.service";
 import {DFSNavigationService} from "./services/navigation.service";
 import {PreloadAllModules, Router, RouterModule, Routes} from "@angular/router";
@@ -62,6 +63,7 @@ export const dfsRoutes: Routes = [
                 // Location - use the platform"s history
             ]
         },
+        DFSManageDataService,
         DFSManageStore,
         DFSManageQuery,
         DFSManageService,
