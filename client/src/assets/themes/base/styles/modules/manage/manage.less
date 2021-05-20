@@ -46,6 +46,7 @@
             flex: 1;
             align-items: center;
             padding: 4px;
+            font-size: 18px;
 
             & > div {
                 margin: 4px;
@@ -62,6 +63,11 @@
         flex-direction: column;
         flex: 1;
         padding: 4px;
+
+        &-label {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
     }
 
     &__buttons-block {
@@ -71,11 +77,23 @@
         padding: 4px;
     }
 
-    &__block-field {
-        margin-bottom: 4px;
+    &__block {
+        display: flex;
+        flex-direction: column;
+        flex: 0 1 auto;
 
-        &-value {
-            font-weight: 500;
+        &-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 18px;
+
+            &-value {
+                font-weight: 500;
+                margin-left: 10px;
+            }
         }
     }
+
 }

@@ -10,6 +10,9 @@ import {NgModule} from "@angular/core";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {BrowserModule} from "@angular/platform-browser";
+import {DFSManageQuery} from "./state/manage.query";
+import {DFSManageService} from "./state/manage.service";
+import {DFSManageStore} from "./state/manage.store";
 
 export const dfsRoutes: Routes = [
     {
@@ -58,8 +61,10 @@ export const dfsRoutes: Routes = [
                 DFSNavigationHistoryService,
                 // Location - use the platform"s history
             ]
-        }
-
+        },
+        DFSManageStore,
+        DFSManageQuery,
+        DFSManageService,
     ],
     bootstrap: [AppComponent]
 })

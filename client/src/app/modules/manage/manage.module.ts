@@ -1,14 +1,12 @@
 import {CommonModule} from "@angular/common";
 import {NgModule} from "@angular/core";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDialogModule} from "@angular/material/dialog";
 import {DFSManageContainersModule} from "../../components/manage-containers/manage-containers.module";
 import {DFSPageBlockModule} from "../../components/page-block/sitting-block.module";
 import {DFSManageDataService} from "../../services/data/manage-data.service";
 import {DFSSManageComponent} from "./manage.component";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {DFSManageQuery} from "./state/manage.query";
-import {DFSManageService} from "./state/manage.service";
-import {DFSManageStore} from "./state/manage.store";
 
 @NgModule({
     imports: [
@@ -16,7 +14,8 @@ import {DFSManageStore} from "./state/manage.store";
         DFSPageBlockModule,
         MatButtonToggleModule,
         DFSManageContainersModule,
-        CommonModule
+        CommonModule,
+        MatDialogModule
     ],
     exports: [
         DFSSManageComponent
@@ -25,10 +24,7 @@ import {DFSManageStore} from "./state/manage.store";
         DFSSManageComponent
     ],
     providers: [
-        DFSManageDataService,
-        DFSManageStore,
-        DFSManageQuery,
-        DFSManageService,
+        DFSManageDataService
     ]
 })
 export class DFSManageModule {

@@ -46,9 +46,22 @@
                 </div>
             </div>
             <div class="dfs-manage__current-block">
-                <div>Параметры текущей заявки</div>
+                <div class="dfs-manage__current-block-label">
+                    Параметры текущей заявки
+                </div>
                 <div>
-                    Settings
+                    <div class="dfs-manage__block-field">
+                        Номер:
+                        <span class="dfs-manage__block-field-value">{{3}}</span>
+                    </div>
+                    <div class="dfs-manage__block-field">
+                        Необходимость дизайна:
+                        <span class="dfs-manage__block-field-value">{{"Нет"}}</span>
+                    </div>
+                    <div class="dfs-manage__block-field">
+                        Уже затрачено на разработку, дни:
+                        <span class="dfs-manage__block-field-value">{{2}}</span>
+                    </div>
                 </div>
             </div>
             <div class="dfs-manage__buttons-block">
@@ -68,10 +81,10 @@
                 </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел дизайна'">
-                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
                     <span class="dfs-manage__block-field-value">
-                        {{simulationState.departmentsParams.designers.workersCount }}
-                        / {{simulationState.departmentsParams.designers.employedWorkersCount}}
+                        {{simulationState.departmentsParams.designers.employedWorkersCount }}
+                        / {{simulationState.departmentsParams.designers.workersCount}}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в дизайне:
@@ -80,29 +93,41 @@
                 <div class="dfs-manage__block-field">Доработка:
                     <span class="dfs-manage__block-field-value">{{"Нет"}}</span>
                 </div>
+                <div class="dfs-manage__block-field">
+                    Средняя загруженность отдела:
+                    <span class="dfs-manage__block-field-value">{{51}}%</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел разработки'">
-                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
                     <span class="dfs-manage__block-field-value">
-                           {{simulationState.departmentsParams.developers.workersCount }}
-                        / {{simulationState.departmentsParams.developers.employedWorkersCount}}
+                        {{simulationState.departmentsParams.developers.employedWorkersCount}}
+                        /   {{simulationState.departmentsParams.developers.workersCount }}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в разработке:
                     <span class="dfs-manage__block-field-value">{{1}}</span>
                 </div>
+                <div class="dfs-manage__block-field">
+                    Средняя загруженность отдела:
+                    <span class="dfs-manage__block-field-value">{{73}}%</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел поддержки'">
-                <div class="dfs-manage__block-field">Число сотрудников (всего / занято):
+                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
                     <span class="dfs-manage__block-field-value">
-                           {{simulationState.departmentsParams.support.workersCount }}
-                        / {{simulationState.departmentsParams.support.employedWorkersCount}}
+                         {{simulationState.departmentsParams.support.employedWorkersCount}}
+                        /  {{simulationState.departmentsParams.support.workersCount }}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в обработке:
                     <span class="dfs-manage__block-field-value">
                         {{'Отсутствует'}}
                     </span>
+                </div>
+                <div class="dfs-manage__block-field">
+                    Средняя загруженность отдела:
+                    <span class="dfs-manage__block-field-value">{{17}}%</span>
                 </div>
                 <button mat-raised-button
                         color="primary"
@@ -112,6 +137,65 @@
             </dfs-manage-block>
         </dfs-manage-containers>
         <dfs-page-block [title]="'Статистика работы симуляции'">
+            <div class="dfs-manage__block">
+                <div class="dfs-manage__block-field">
+                    Обработанные заявки:
+                    <span class="dfs-manage__block-field-value">{{2}}</span>
+                </div>
+                <div class="dfs-manage__block-field">
+                    Общее модельное время работы, дни:
+                    <span class="dfs-manage__block-field-value">{{34}}</span>
+                </div>
+                <div class="dfs-manage__block-field">
+                    Количество отмененных заявок
+                    <span class="dfs-manage__block-field-value">{{1}}</span>
+                </div>
+                <div class="dfs-manage__block-field">
+                    Среднее время разработки и выдачи проекта, дни:
+                    <span class="dfs-manage__block-field-value">{{15}}</span>
+                </div>
+                <div class="dfs-manage__block-field">
+                    test:
+                    <span class="dfs-manage__block-field-value">{{1}}</span>
+                </div>
+            </div>
         </dfs-page-block>
     </div>
 </ng-container>
+
+<ng-template #resultStatisticTemplate>
+    <div class="dfs-manage__result-block-title"
+         mat-dialog-title>
+        Статистика работы симуляции
+    </div>
+    <div class="dfs-manage__block"
+         mat-dialog-content>
+        <div class="dfs-manage__block-field">
+            Обработанные заявки:
+            <span class="dfs-manage__block-field-value">{{2}}</span>
+        </div>
+        <div class="dfs-manage__block-field">
+            Общее модельное время работы, дни:
+            <span class="dfs-manage__block-field-value">{{34}}</span>
+        </div>
+        <div class="dfs-manage__block-field">
+            Количество отмененных заявок
+            <span class="dfs-manage__block-field-value">{{1}}</span>
+        </div>
+        <div class="dfs-manage__block-field">
+            Среднее время разработки и выдачи проекта, дни:
+            <span class="dfs-manage__block-field-value">{{15}}</span>
+        </div>
+        <div class="dfs-manage__block-field">
+            test:
+            <span class="dfs-manage__block-field-value">{{1}}</span>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button
+                mat-dialog-close
+                color="primary">
+            Закрыть
+        </button>
+    </div>
+</ng-template>
