@@ -57,4 +57,26 @@ export class DFSManageService {
         });
         this.loaderService.setLoading(loadingStatus === DataStatus.LOADING);
     }
+
+    public generateProjectRequest(): Observable<any>{
+        this.setLoading(DataStatus.LOADING);
+        return of(null)
+            .pipe(
+                tap(value => {
+
+                }),
+                finalize(() => this.setLoading(DataStatus.LOADED))
+            );
+    }
+
+    public generateSupportRequest(): Observable<any> {
+        this.setLoading(DataStatus.LOADING);
+        return of(null)
+            .pipe(
+                tap(value => {
+
+                }),
+                finalize(() => this.setLoading(DataStatus.LOADED))
+            );
+    }
 }

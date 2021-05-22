@@ -16,7 +16,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {DFSSettingsFormService} from "src/app/modules/settings/services/settings-form.service";
-import {DFSDistributionsPopoversModule} from "../../components/popowers/distributions-popovers.module";
+import {DFSPopoversModule} from "../../components/popowers/popovers.module";
 import {DFSSettingsDataService} from "../../services/data/settings-data.service";
 
 @NgModule({
@@ -37,7 +37,7 @@ import {DFSSettingsDataService} from "../../services/data/settings-data.service"
         MatOptionModule,
         MatSelectModule,
         MatDialogModule,
-        DFSDistributionsPopoversModule
+        DFSPopoversModule
     ],
     exports: [
         DFSStartPageComponent,

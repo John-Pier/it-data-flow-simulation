@@ -131,7 +131,8 @@
                 </div>
                 <button mat-raised-button
                         color="primary"
-                        [disabled]="simulationState.state !== 'run'">
+                        [disabled]="simulationState.state !== 'run'"
+                        (click)="_onGenerateSupportRequest()">
                     Сгенерировать заявку
                 </button>
             </dfs-manage-block>

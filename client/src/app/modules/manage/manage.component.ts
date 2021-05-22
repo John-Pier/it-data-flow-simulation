@@ -1,5 +1,6 @@
 import {Component, HostBinding, OnDestroy, OnInit, TemplateRef, ViewChild} from "@angular/core";
 import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {map, tap} from "rxjs/operators";
 import {enterLeaveAnimation, routerAnimations} from "src/app/core/core.animations";
@@ -48,6 +49,7 @@ export class DFSSManageComponent implements OnInit, OnDestroy {
                 private navigationService: DFSNavigationService,
                 private headerService: DFSHeaderService,
                 private manageService: DFSManageService,
+                private snackBar: MatSnackBar,
                 private dialog: MatDialog) {
     }
 
@@ -86,10 +88,6 @@ export class DFSSManageComponent implements OnInit, OnDestroy {
         });
     }
 
-    public _onGenerateRequest(): void {
-
-    }
-
     public _onExitClick(): void {
         this.navigationService.navigateToDefault();
     }
@@ -103,5 +101,23 @@ export class DFSSManageComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    public _onGenerateRequest(): void {
+        this.manageService.generateProjectRequest()
+            .subscribe(() => {
+                this.snackBar.open("Заявка на разработку сгенерирована", "Ок", {
+                    duration: 2100
+                });
+            });
+    }
+
+    public _onGenerateSupportRequest(): void {
+        this.manageService.generateSupportRequest()
+            .subscribe(() => {
+                this.snackBar.open("Заявка поддержки сгенерирована", "Ок", {
+                    duration: 2100
+                });
+            });
     }
 }

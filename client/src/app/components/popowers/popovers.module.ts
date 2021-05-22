@@ -7,11 +7,11 @@ import {MatOptionModule} from "@angular/material/core";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
-import {DFSPageBlockModule} from "../page-block/sitting-block.module";
 import {DFSDetermineComponent} from "./distributions/determine.component";
 import {DFSExponentialComponent} from "./distributions/exponential.component";
 import {DFSNormalComponent} from "./distributions/normal.component";
 import {DFSUniformComponent} from "./distributions/uniform.component";
+import {DFSSManageComponent} from "./generate-request/generate-request.component";
 
 @NgModule({
     imports:[
@@ -29,14 +29,16 @@ import {DFSUniformComponent} from "./distributions/uniform.component";
         DFSExponentialComponent,
         DFSDetermineComponent,
         DFSNormalComponent,
-        DFSUniformComponent
+        DFSUniformComponent,
+        DFSSManageComponent
     ],
     exports: [
         DFSExponentialComponent,
         DFSDetermineComponent,
         DFSNormalComponent,
-        DFSUniformComponent
+        DFSUniformComponent,
+        DFSSManageComponent
     ]
 })
-export class DFSDistributionsPopoversModule {
+export class DFSPopoversModule {
 }
