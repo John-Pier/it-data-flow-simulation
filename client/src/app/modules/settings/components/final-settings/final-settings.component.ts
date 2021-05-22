@@ -39,7 +39,6 @@ export class DFSFinalSettingsComponent implements OnInit {
                 private settingsFormService: DFSSettingsFormService,
                 private headerService: DFSHeaderService,
                 private manageService: DFSManageService,
-                public loaderService: DFSLoaderService,
                 private settingsService: DFSSettingsService) {
     }
 
@@ -48,21 +47,20 @@ export class DFSFinalSettingsComponent implements OnInit {
     }
 
     public _onNextClick(): void {
-        this.manageService.updateState(state => {
-            return {
-                ...state,
-                projectName: this.query.getValue().projectName,
-                settings: this.query.getValue().settings
-            };
-        });
-        this.navigationService.navigateTo(dfsAppRoutesMap[DFSRoutesString.MANAGE_PAGE]);
-        // this.settingsService.startSimulation()
-        //     .pipe(
-        //         untilDestroyed(this)
-        //     )
-        //     .subscribe(() => {
-        //         this.navigationService.navigateTo(dfsAppRoutesMap[DFSRoutesString.MANAGE_PAGE]);
-        //     });
+        this.settingsService.startSimulation()
+            .pipe(
+                untilDestroyed(this)
+            )
+            .subscribe(() => {
+                this.manageService.updateState(state => {
+                    return {
+                        ...state,
+                        projectName: this.query.getValue().projectName,
+                        settings: this.query.getValue().settings
+                    };
+                });
+                this.navigationService.navigateTo(dfsAppRoutesMap[DFSRoutesString.MANAGE_PAGE]);
+            });
     }
 
     public _onBackClick(): void {

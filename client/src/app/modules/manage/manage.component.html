@@ -31,7 +31,7 @@
          *ngIf="(simulationState$ | async) as simulationState">
         <dfs-page-block [title]="'Основные параметры'">
             <div class="dfs-manage__model-time-block">
-                <div class="dfs-manage__model-time-label">Модельное время: {{"0"}}</div>
+                <div class="dfs-manage__model-time-label">Модельное время: {{34}} дня, {{16}} часов</div>
                 <div class="dfs-manage__model-time-block">
                     <div>Текущее ускорение: {{"1"}}</div>
                     <div>
@@ -143,20 +143,12 @@
                     <span class="dfs-manage__block-field-value">{{2}}</span>
                 </div>
                 <div class="dfs-manage__block-field">
-                    Общее модельное время работы, дни:
-                    <span class="dfs-manage__block-field-value">{{34}}</span>
-                </div>
-                <div class="dfs-manage__block-field">
                     Количество отмененных заявок
                     <span class="dfs-manage__block-field-value">{{1}}</span>
                 </div>
                 <div class="dfs-manage__block-field">
                     Среднее время разработки и выдачи проекта, дни:
-                    <span class="dfs-manage__block-field-value">{{15}}</span>
-                </div>
-                <div class="dfs-manage__block-field">
-                    test:
-                    <span class="dfs-manage__block-field-value">{{1}}</span>
+                    <span class="dfs-manage__block-field-value">{{15.11}}</span>
                 </div>
             </div>
         </dfs-page-block>
@@ -184,11 +176,7 @@
         </div>
         <div class="dfs-manage__block-field">
             Среднее время разработки и выдачи проекта, дни:
-            <span class="dfs-manage__block-field-value">{{15}}</span>
-        </div>
-        <div class="dfs-manage__block-field">
-            test:
-            <span class="dfs-manage__block-field-value">{{1}}</span>
+            <span class="dfs-manage__block-field-value">{{15.11}}</span>
         </div>
     </div>
     <div mat-dialog-actions align="end">

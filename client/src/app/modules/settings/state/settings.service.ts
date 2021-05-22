@@ -9,6 +9,7 @@ import {
     SettingsConfigItem,
     SettingsState
 } from "src/app/modules/settings/state/settings.store";
+import {DFSLoaderService} from "../../../components/loader/services/loader.service";
 import {DataStatus} from "../../../core/models/state.type";
 import {DFSSettingsDataService} from "../../../services/data/settings-data.service";
 
@@ -16,6 +17,7 @@ import {DFSSettingsDataService} from "../../../services/data/settings-data.servi
 export class DFSSettingsService {
     constructor(protected store: DFSSettingsStore,
                 protected query: DFSSettingsQuery,
+                public loaderService: DFSLoaderService,
                 protected dateService: DFSSettingsDataService) {
     }
 
@@ -56,9 +58,13 @@ export class DFSSettingsService {
     }
 
     public setProjectName(name: string): void {
-        this.updateState(() => {
+        this.updateState(state => {
             return {
-                projectName: name
+                projectName: name,
+                settings: {
+                    ...state.settings,
+                    name: name
+                }
             };
         });
     }
@@ -72,8 +78,8 @@ export class DFSSettingsService {
     }
 
     public startSimulation(): Observable<any> {
-        this.setLoading(DataStatus.LOADING)
-        return this.dateService.startSimulation(this.query.getValue())
+        this.setLoading(DataStatus.LOADING);
+        return this.dateService.startSimulation(this.query.getValue().settings)
             .pipe(
                 tap(() => this.setLoading(DataStatus.LOADED))
             );
@@ -84,6 +90,7 @@ export class DFSSettingsService {
             return {
                 loading: loadingStatus
             }
-        })
+        });
+        this.loaderService.setLoading(loadingStatus === DataStatus.LOADING);
     }
 }

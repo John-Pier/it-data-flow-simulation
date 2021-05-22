@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {UpdateStateCallback} from "@datorama/akita";
 import {Observable, of} from "rxjs";
-import {tap} from "rxjs/operators";
+import {finalize, tap} from "rxjs/operators";
 import {DFSLoaderService} from "../components/loader/services/loader.service";
 import {DFSSimulationState} from "../core/models/manage.type";
 import {DFSSettings} from "../core/models/settings.type";
@@ -26,14 +26,14 @@ export class DFSManageService {
                     this.updateState(state => {
                         return {
                             ...state,
-                            loading: DataStatus.LOADED,
                             simulationState: {
                                 ...state.simulationState,
                                 state: "run"
                             }
                         }
-                    })
-                })
+                    });
+                }),
+                finalize(() => this.setLoading(DataStatus.LOADED))
             );
     }
 
@@ -54,6 +54,7 @@ export class DFSManageService {
             return {
                 loading: loadingStatus
             }
-        })
+        });
+        this.loaderService.setLoading(loadingStatus === DataStatus.LOADING);
     }
 }

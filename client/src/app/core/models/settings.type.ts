@@ -1,7 +1,9 @@
 import {DepartmentsType} from "./departments.type";
 import {DFSDistributionEntity} from "./distributions.type";
 
-export type DFSSettings = Readonly<{}> &
+export type DFSSettings = Readonly<{
+    name: string;
+}> &
     DFSDepartmentsSettings &
     DFSRequestSettings &
     DFSManagementSettings &

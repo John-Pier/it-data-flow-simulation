@@ -36,6 +36,7 @@ export function createInitialState(): ManageState & LoadingState {
             timeAcceleration: 1
         },
         settings: {
+            name: "Test IT",
             departments: [],
             designNeededPercent: 100,
             designerWorkersCount: 1,

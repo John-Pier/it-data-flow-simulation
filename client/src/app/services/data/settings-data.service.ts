@@ -2,6 +2,7 @@ import {HttpClient} from "@angular/common/http";
 import {Inject, Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {DFS_APP_API_CONFIG, DFSAppAPIConfig} from "../../app.config";
+import {DFSSettings} from "../../core/models/settings.type";
 import {SettingsState} from "../../modules/settings/state/settings.store";
 import {DFSDataService} from "./abstract-data.service";
 
@@ -12,7 +13,7 @@ export class DFSSettingsDataService extends DFSDataService {
         super(config, http);
     }
 
-    public startSimulation(settings: SettingsState): Observable<any> {
-        return this.post<SettingsState>("settings", settings);
+    public startSimulation(settings: DFSSettings): Observable<DFSSettings> {
+        return this.post<DFSSettings>("settings", settings);
     }
 }

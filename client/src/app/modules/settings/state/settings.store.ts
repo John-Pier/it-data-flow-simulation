@@ -98,6 +98,7 @@ export function createInitialState(): SettingsState & LoadingState {
             }
         ],
         settings: {
+            name: "TestMessage IT",
             departments: [],
             designNeededPercent: 100,
             designerWorkersCount: 1,

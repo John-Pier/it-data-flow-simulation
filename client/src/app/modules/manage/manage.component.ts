@@ -1,4 +1,4 @@
-import {Component, HostBinding, OnInit, TemplateRef, ViewChild} from "@angular/core";
+import {Component, HostBinding, OnDestroy, OnInit, TemplateRef, ViewChild} from "@angular/core";
 import {MatDialog} from "@angular/material/dialog";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {map, tap} from "rxjs/operators";
@@ -17,7 +17,7 @@ import {DFSManageService} from "../../state/manage.service";
         enterLeaveAnimation
     ]
 })
-export class DFSSManageComponent implements OnInit {
+export class DFSSManageComponent implements OnInit, OnDestroy {
 
     public simulationState$ = this.manageService.selectSimulationState();
 
@@ -92,5 +92,16 @@ export class DFSSManageComponent implements OnInit {
 
     public _onExitClick(): void {
         this.navigationService.navigateToDefault();
+    }
+
+    public ngOnDestroy(): void {
+        this.manageService.updateState(state => {
+            return {
+                simulationState: {
+                    ...state.simulationState,
+                    state: "stop"
+                }
+            }
+        });
     }
 }

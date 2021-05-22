@@ -23,6 +23,7 @@ export class DFSMainContainerComponent implements OnInit {
 
     constructor(private navigationService: DFSNavigationService,
                 private headerService: DFSHeaderService,
+
                 @Inject(DFS_CONTACTS_DATA_CONFIG) public _contactsDataConfig: DFSContactsDataConfig) {
     }
 
@@ -33,7 +34,7 @@ export class DFSMainContainerComponent implements OnInit {
             //     route: dfsAppRoutesMap[DFSRoutesString.MAIN],
             // },
             // {
-            //     tabName: "Квесты",
+            //     tabName: "",
             //     route: dfsAppRoutesMap[DFSRoutesString.MAIN],
             // }
         ];

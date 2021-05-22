@@ -1,11 +1,9 @@
+import {DFSSettings} from "../../client/src/app/core/models/settings.type";
+
 export type ServerState = Readonly<{
-    currentSettings: SettingsState;
+    currentSettings: DFSSettings;
     simulationStatus: SimulationStatus
     state: SimulationState,
-}>;
-
-export type SettingsState = Readonly<{
-    departments: string[],
 }>;
 
 export type SimulationState = Readonly<{}>;

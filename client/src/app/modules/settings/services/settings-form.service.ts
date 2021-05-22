@@ -1,10 +1,10 @@
 import {ComponentType} from "@angular/cdk/portal";
+import {Injectable} from "@angular/core";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {merge, Observable} from "rxjs";
+import {debounceTime, map, startWith, tap} from "rxjs/operators";
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {combineLatest, merge, Observable} from "rxjs";
-import {debounceTime, distinctUntilChanged, map, startWith, tap} from "rxjs/operators";
-import {Component, Injectable} from "@angular/core";
 import {DFSDetermineComponent} from "../../../components/popowers/distributions/determine.component";
 import {DFSExponentialComponent} from "../../../components/popowers/distributions/exponential.component";
 import {DFSNormalComponent} from "../../../components/popowers/distributions/normal.component";
@@ -50,15 +50,15 @@ export class DFSSettingsFormService {
         return merge([
             this.getValueChangesStream(formGroups.requestForm)
                 .pipe(
-                   map(value => {
-                       return {
-                           requestManualControl: value.manualControl,
-                           requestDistribution: {
-                               ...this.query.getValue().settings.requestDistribution,
-                               type: value.distribution
-                           }
-                       } as Partial<DFSSettings>;
-                   })
+                    map(value => {
+                        return {
+                            requestManualControl: value.manualControl,
+                            requestDistribution: {
+                                ...this.query.getValue().settings.requestDistribution,
+                                type: value.distribution
+                            }
+                        } as Partial<DFSSettings>;
+                    })
                 ),
             this.getValueChangesStream(formGroups.responseCustomerForm)
                 .pipe(
@@ -137,8 +137,8 @@ export class DFSSettingsFormService {
                     this.settingsService.updateState(state => {
                         return {
                             settings: {
-                                ...state,
-                               ...value
+                                ...state.settings,
+                                // ...value
                             }
                         }
                     });
@@ -225,10 +225,14 @@ export class DFSSettingsFormService {
 
     public getComponent(distributionType: DFSDistribution): ComponentType<any> {
         switch (distributionType) {
-            case DFSDistribution.DETERMINISTIC: return DFSDetermineComponent;
-            case DFSDistribution.EXPONENTIAL: return DFSExponentialComponent;
-            case DFSDistribution.NORMAL: return DFSNormalComponent;
-            case DFSDistribution.UNIFORM: return DFSUniformComponent;
+            case DFSDistribution.DETERMINISTIC:
+                return DFSDetermineComponent;
+            case DFSDistribution.EXPONENTIAL:
+                return DFSExponentialComponent;
+            case DFSDistribution.NORMAL:
+                return DFSNormalComponent;
+            case DFSDistribution.UNIFORM:
+                return DFSUniformComponent;
         }
     }
 
