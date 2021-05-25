@@ -31,7 +31,7 @@
          *ngIf="(simulationState$ | async) as simulationState">
         <dfs-page-block [title]="'Основные параметры'">
             <div class="dfs-manage__model-time-block">
-                <div class="dfs-manage__model-time-label">Модельное время: {{34}} дня, {{16}} часов</div>
+                <div class="dfs-manage__model-time-label">Модельное время: {{34}} д., {{16}} ч.</div>
                 <div class="dfs-manage__model-time-block">
                     <div>Текущее ускорение: {{"1"}}</div>
                     <div>
@@ -79,16 +79,21 @@
                 <div class="dfs-manage__block-field">Заявка в обработке:
                     <span class="dfs-manage__block-field-value">{{1}}</span>
                 </div>
+                <div class="dfs-manage__block-field">Время заявки в обработке:
+                    <span class="dfs-manage__block-field-value">{{3}} д. {{8}} ч.</span>
+                </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел дизайна'">
-                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
+                <div class="dfs-manage__block-field">Число сотрудников:
                     <span class="dfs-manage__block-field-value">
-                        {{simulationState.departmentsParams.designers.employedWorkersCount }}
-                        / {{simulationState.departmentsParams.designers.workersCount}}
+                        {{simulationState.departmentsParams.designers.workersCount}}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в дизайне:
                     <span class="dfs-manage__block-field-value">{{'Отсутствует'}}</span>
+                </div>
+                <div class="dfs-manage__block-field">Время заявки в дизайне:
+                    <span class="dfs-manage__block-field-value">{{0}} ч.</span>
                 </div>
                 <div class="dfs-manage__block-field">Доработка:
                     <span class="dfs-manage__block-field-value">{{"Нет"}}</span>
@@ -99,14 +104,16 @@
                 </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел разработки'">
-                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
+                <div class="dfs-manage__block-field">Число сотрудников:
                     <span class="dfs-manage__block-field-value">
-                        {{simulationState.departmentsParams.developers.employedWorkersCount}}
-                        /   {{simulationState.departmentsParams.developers.workersCount }}
+                        {{simulationState.departmentsParams.developers.workersCount }}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в разработке:
                     <span class="dfs-manage__block-field-value">{{1}}</span>
+                </div>
+                <div class="dfs-manage__block-field">Время заявки в обработке:
+                    <span class="dfs-manage__block-field-value">{{1}} д. {{4}} ч.</span>
                 </div>
                 <div class="dfs-manage__block-field">
                     Средняя загруженность отдела:
@@ -114,16 +121,18 @@
                 </div>
             </dfs-manage-block>
             <dfs-manage-block [title]="'Отдел поддержки'">
-                <div class="dfs-manage__block-field">Число сотрудников (занято / всего):
+                <div class="dfs-manage__block-field">Число сотрудников:
                     <span class="dfs-manage__block-field-value">
-                         {{simulationState.departmentsParams.support.employedWorkersCount}}
-                        /  {{simulationState.departmentsParams.support.workersCount }}
+                        {{simulationState.departmentsParams.support.workersCount }}
                     </span>
                 </div>
                 <div class="dfs-manage__block-field">Заявка в обработке:
                     <span class="dfs-manage__block-field-value">
                         {{'Отсутствует'}}
                     </span>
+                </div>
+                <div class="dfs-manage__block-field">Время заявки в обработке:
+                    <span class="dfs-manage__block-field-value">{{0}} ч.</span>
                 </div>
                 <div class="dfs-manage__block-field">
                     Средняя загруженность отдела:
