@@ -1,5 +1,6 @@
 import express, {NextFunction, Request, Response, RequestHandler} from "express";
 import * as bodyParser from "body-parser";
+import {ManageController} from "./controller/manage.controller";
 import {SettingsController} from "./controller/settings.controller";
 
 const SERVER_PORT = 3000;
@@ -24,6 +25,7 @@ app.use(allowCrossDomain);
 app.use(loggingMiddleware);
 
 app.use((new SettingsController(uiUrl)).router);
+app.use((new ManageController(uiUrl)).router);
 
 app.listen(SERVER_PORT, () => {
     console.log(`DFS API server is listening on port: ${SERVER_PORT}`);

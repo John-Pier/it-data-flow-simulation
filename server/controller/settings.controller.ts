@@ -13,9 +13,7 @@ export class SettingsController extends AbstractController {
         this.post("settings", (request: Request, response: Response) => {
             const settings: DFSSettings = request.body;
             serverService.setupSettings(settings);
-            console.log(settings);
             response.status(200).json();
-
         });
     }
 }
