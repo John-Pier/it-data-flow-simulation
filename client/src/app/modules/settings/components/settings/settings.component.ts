@@ -29,6 +29,8 @@ export class DFSSettingsComponent implements OnInit {
 
     public _settingsFormGroups = this.settingsFormService.getSettingsFormGroups();
 
+    public formsValid$ = this.settingsFormService.selectFormsValid(this._settingsFormGroups);
+
     public _distributionsValues = distributionsValues;
 
     @HostBinding("[@routerAnimations]")

@@ -1,7 +1,8 @@
 import {ComponentType} from "@angular/cdk/portal";
 import {Injectable} from "@angular/core";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {merge, Observable} from "rxjs";
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {UpdateStateCallback} from "@datorama/akita";
+import {combineLatest, Observable} from "rxjs";
 import {debounceTime, map, startWith, tap} from "rxjs/operators";
 import {DFSSettingsQuery} from "src/app/modules/settings/state/settings.query";
 import {DFSSettingsService} from "src/app/modules/settings/state/settings.service";
@@ -41,107 +42,138 @@ export type SettingsFormGroups = DesignerSettingsFormGroups &
 
 @Injectable()
 export class DFSSettingsFormService {
-
     constructor(protected query: DFSSettingsQuery,
                 private settingsService: DFSSettingsService) {
     }
 
     public subscribeSettingsFormGroupsValues(formGroups: SettingsFormGroups): Observable<any> {
-        return merge([
+        return combineLatest([
             this.getValueChangesStream(formGroups.requestForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            requestManualControl: value.manualControl,
-                            requestDistribution: {
-                                ...this.query.getValue().settings.requestDistribution,
-                                type: value.distribution
-                            }
-                        } as Partial<DFSSettings>;
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                requestManualControl: value.manualControl,
+                                requestDistribution: {
+                                    ...state.requestDistribution,
+                                    type: value.distribution
+                                }
+                            };
+                        });
                     })
                 ),
             this.getValueChangesStream(formGroups.responseCustomerForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            responseCustomerDistribution: {
-                                ...this.query.getValue().settings.responseCustomerDistribution,
-                                type: value.distribution
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                responseCustomerDistribution: {
+                                    ...state.responseCustomerDistribution,
+                                    type: value.distribution
+                                }
                             }
-                        } as Partial<DFSSettings>;
+                        });
                     })
                 ),
             this.getValueChangesStream(formGroups.processingTimeForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            designNeededPercent: value.designNeededPercent ?? 0,
-                            processingTimeDistribution: {
-                                ...this.query.getValue().settings.processingTimeDistribution,
-                                type: value.distribution
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                designNeededPercent: value.designNeededPercent ?? 0,
+                                processingTimeDistribution: {
+                                    ...this.query.getValue().settings.processingTimeDistribution,
+                                    type: value.distribution
+                                }
                             }
-                        } as Partial<DFSSettings>;
+                        });
                     })
                 ),
             this.getValueChangesStream(formGroups.designForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            designerWorkersCount: value.workersCount,
-                            revisionProbability: value.revisionProbability ?? 0,
-                            developCostsDistribution: {
-                                ...this.query.getValue().settings.designCostsDistribution,
-                                type: value.costsDistribution
-                            },
-                            revisionTimeDistribution: {
-                                ...this.query.getValue().settings.revisionTimeDistribution,
-                                type: value.revisionTimeDistribution
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                designerWorkersCount: value.workersCount,
+                                revisionProbability: value.revisionProbability ?? 0,
+                                developCostsDistribution: {
+                                    ...state.designCostsDistribution,
+                                    type: value.costsDistribution
+                                },
+                                revisionTimeDistribution: {
+                                    ...state.revisionTimeDistribution,
+                                    type: value.revisionTimeDistribution
+                                }
                             }
-                        } as Partial<DFSSettings>;
+                        });
                     })
                 ),
             this.getValueChangesStream(formGroups.developersForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            developerWorkersCount: value.workersCount,
-                            developCostsDistribution: {
-                                ...this.query.getValue().settings.developCostsDistribution,
-                                type: value.costsDistribution
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                developerWorkersCount: value.workersCount,
+                                developCostsDistribution: {
+                                    ...state.developCostsDistribution,
+                                    type: value.costsDistribution
+                                }
                             }
-                        } as Partial<DFSSettings>;
+                        });
                     })
                 ),
             this.getValueChangesStream(formGroups.supportForm)
                 .pipe(
-                    map(value => {
-                        return {
-                            supportWorkersCount: value.workersCount,
-                            supportManualControl: value.manualControl,
-                            supportProcessingTimeDistribution: {
-                                ...this.query.getValue().settings.supportProcessingTimeDistribution,
-                                type: value.supportProcessingTimeDistribution
-                            },
-                            requestTimeDistribution: {
-                                ...this.query.getValue().settings.requestTimeDistribution,
-                                type: value.requestTimeDistribution
+                    tap(value => {
+                        this.updateSettings(state => {
+                            return {
+                                supportWorkersCount: value.workersCount,
+                                supportManualControl: value.manualControl,
+                                supportProcessingTimeDistribution: {
+                                    ...state.supportProcessingTimeDistribution,
+                                    type: value.supportProcessingTimeDistribution
+                                },
+                                requestTimeDistribution: {
+                                    ...state.requestTimeDistribution,
+                                    type: value.requestTimeDistribution
+                                }
                             }
-                        } as Partial<DFSSettings>;
+                        });
                     })
+                )
+        ]);
+    }
+
+    public selectFormsValid(formGroups: SettingsFormGroups): Observable<boolean> {
+        return combineLatest([
+            formGroups.requestForm.statusChanges
+                .pipe(
+                    startWith(formGroups.requestForm.status)
                 ),
+            formGroups.supportForm.statusChanges
+                .pipe(
+                    startWith(formGroups.supportForm.status)
+                ),
+            formGroups.responseCustomerForm.statusChanges
+                .pipe(
+                    startWith(formGroups.responseCustomerForm.status)
+                ),
+            formGroups.developersForm.statusChanges
+                .pipe(
+                    startWith(formGroups.developersForm.status)
+                ),
+            formGroups.designForm.statusChanges
+                .pipe(
+                    startWith(formGroups.designForm.status)
+                ),
+            formGroups.processingTimeForm.statusChanges
+                .pipe(
+                    startWith(formGroups.processingTimeForm.status)
+                )
         ])
             .pipe(
-                debounceTime(300),
-                tap(console.log),
-                tap((value) => {
-                    this.settingsService.updateState(state => {
-                        return {
-                            settings: {
-                                ...state.settings,
-                                // ...value
-                            }
-                        }
-                    });
+                map((values: string[]) => {
+                    return values.filter(value => value !== "VALID").length === 0;
                 })
             );
     }
@@ -165,13 +197,14 @@ export class DFSSettingsFormService {
     }
 
     public getRequestSettingsFormGroups(): RequestSettingsFormGroups {
+
         return {
             requestForm: new FormGroup({
-                distribution: new FormControl(null),
-                manualControl: new FormControl(true)
+                distribution: new FormControl(this.query.getValue().settings.requestDistribution?.type, [this.getRequiredValidatorFunction("requestManualControl")]),
+                manualControl: new FormControl(this.query.getValue().settings.requestManualControl)
             }),
             responseCustomerForm: new FormGroup({
-                distribution: new FormControl(null),
+                distribution: new FormControl(this.query.getValue().settings.responseCustomerDistribution?.type, [Validators.required]),
             })
         };
     }
@@ -179,8 +212,8 @@ export class DFSSettingsFormService {
     public getManagementSettingsFormGroups(): ManagementSettingsFormGroups {
         return {
             processingTimeForm: new FormGroup({
-                distribution: new FormControl(null),
-                designNeededPercent: new FormControl(100, [Validators.min(0), Validators.max(100)]),
+                distribution: new FormControl(this.query.getValue().settings.processingTimeDistribution?.type, [Validators.required]),
+                designNeededPercent: new FormControl(this.query.getValue().settings.designNeededPercent ?? 100, [Validators.min(0), Validators.max(100)]),
             }),
         };
     }
@@ -188,10 +221,10 @@ export class DFSSettingsFormService {
     public getDesignerSettingsFormGroups(): DesignerSettingsFormGroups {
         return {
             designForm: new FormGroup({
-                workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                costsDistribution: new FormControl(null),
-                revisionTimeDistribution: new FormControl(null),
-                revisionProbability: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+                workersCount: new FormControl(this.query.getValue().settings.designerWorkersCount ?? 1, [Validators.required, Validators.min(1), Validators.max(25)]),
+                costsDistribution: new FormControl(this.query.getValue().settings.designCostsDistribution?.type, [Validators.required]),
+                revisionTimeDistribution: new FormControl(this.query.getValue().settings.revisionTimeDistribution?.type, [Validators.required]),
+                revisionProbability: new FormControl(this.query.getValue().settings.revisionProbability ?? 0, [Validators.min(0), Validators.max(100)]),
             }),
         };
     }
@@ -199,8 +232,8 @@ export class DFSSettingsFormService {
     public getDevelopersSettingsFormGroups(): DevelopersSettingsFormGroups {
         return {
             developersForm: new FormGroup({
-                workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                costsDistribution: new FormControl(null)
+                workersCount: new FormControl(this.query.getValue().settings.developerWorkersCount ?? 1, [Validators.required, Validators.min(1), Validators.max(25)]),
+                costsDistribution: new FormControl(this.query.getValue().settings.designCostsDistribution?.type, [Validators.required])
             })
         };
     }
@@ -208,10 +241,10 @@ export class DFSSettingsFormService {
     public getSupportSettingsFormGroups(): SupportSettingsFormGroups {
         return {
             supportForm: new FormGroup({
-                workersCount: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(25)]),
-                supportProcessingTimeDistribution: new FormControl(null),
-                requestTimeDistribution: new FormControl(null),
-                manualRequestControl: new FormControl(true)
+                workersCount: new FormControl(this.query.getValue().settings.supportWorkersCount ?? 1, [Validators.required, Validators.min(1), Validators.max(25)]),
+                supportProcessingTimeDistribution: new FormControl(this.query.getValue().settings.supportProcessingTimeDistribution?.type, [Validators.required]),
+                requestTimeDistribution: new FormControl(this.query.getValue().settings.requestTimeDistribution?.type, [this.getRequiredValidatorFunction("supportManualControl")]),
+                manualRequestControl: new FormControl(this.query.getValue().settings.supportManualControl ?? true)
             })
         };
     }
@@ -239,5 +272,30 @@ export class DFSSettingsFormService {
     public getValueChangesStream(formGroup: FormGroup): Observable<any> {
         return formGroup.valueChanges
             .pipe(debounceTime(300));
+    }
+
+    public updateSettings(updateStateCallback: UpdateStateCallback<DFSSettings>): void {
+        this.settingsService.updateState(state => {
+            return {
+                settings: {
+                    ...state.settings,
+                    ...updateStateCallback(state.settings)
+                }
+            }
+        });
+    }
+
+    private getRequiredValidatorFunction(manualControlName: keyof DFSSettings): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (this.query.getValue().settings[manualControlName]) {
+                return null;
+            } else {
+                return !control.value
+                    ? {
+                        required: true
+                    }
+                    : null
+            }
+        }
     }
 }

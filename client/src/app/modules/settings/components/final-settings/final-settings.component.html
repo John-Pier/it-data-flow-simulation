@@ -43,6 +43,7 @@
         </button>
         <button mat-raised-button
                 color="primary"
+                [disabled]="!(formsValid$ | async)"
                 (click)="_onNextClick()">
             Завершить настройку
         </button>

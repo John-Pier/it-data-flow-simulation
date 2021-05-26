@@ -29,6 +29,8 @@ export class DFSFinalSettingsComponent implements OnInit {
 
     public _settingsFormGroups = this.settingsFormService.getSettingsFormGroups();
 
+    public formsValid$ = this.settingsFormService.selectFormsValid(this._settingsFormGroups);
+
     public _distributionsValues = distributionsValues;
 
     @HostBinding("class.dfs-settings")
@@ -64,7 +66,7 @@ export class DFSFinalSettingsComponent implements OnInit {
     }
 
     public _onBackClick(): void {
-        this.navigationService.back();
+        this.navigationService.navigateWithoutHistory(dfsAppRoutesMap[DFSRoutesString.SETTINGS]);
     }
 
     public _trackSettingsConfigById(index: number, value: SettingsConfigItem): string {
