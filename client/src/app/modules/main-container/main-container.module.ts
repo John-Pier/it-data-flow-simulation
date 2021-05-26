@@ -3,6 +3,7 @@ import {NgModule, Type} from "@angular/core";
 import {MatButtonModule} from "@angular/material/button";
 import {DFSAccessDeniedModule} from "../../components/access-denied/access-denied.module";
 import {DFSHeaderModule} from "../../components/header/header.module";
+import {DFSHelpModule} from "../../components/popowers/help-page/help.module";
 import {DFSNotFoundModule} from "../../components/not-found/not-found.module";
 import {DFSMainContainerComponent} from "./main-container.component";
 import {MAIN_ROUTES} from "./main-routing";
@@ -26,7 +27,8 @@ const dfsModules: Type<any>[] = [
     DFSNotFoundModule,
     DFSAccessDeniedModule,
     DFSSettingsModule,
-    DFSManageModule
+    DFSManageModule,
+    DFSHelpModule
 ];
 
 const matModules: Type<any>[] = [
