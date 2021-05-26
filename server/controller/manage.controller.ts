@@ -11,6 +11,9 @@ export class ManageController extends AbstractController {
         this.registerPOSTSetStatus();
         this.registerPUTGenerateRequest();
         this.registerPUTGenerateSupportRequest();
+        this.registerPUTStopSimulation();
+        this.registerPUTPauseSimulation();
+        this.registerPUTResumeSimulation();
     }
 
     public registerPOSTSetStatus(): void {
@@ -33,9 +36,46 @@ export class ManageController extends AbstractController {
     }
 
     public registerPUTGenerateSupportRequest(): void {
-        this.post("manage/generate-support-request", (request: Request, response: Response) => {
+        this.put("manage/generate-support-request", (request: Request, response: Response) => {
             if(serverQuery.settings.requestManualControl) {
                 simulationService.generateSupportRequest();
+                response.status(200).json({status: "ok"});
+            } else {
+                response.status(500).json({status: "error"});
+            }
+        });
+    }
+
+    public registerPUTStopSimulation(): void {
+        this.put("manage/stop", (request: Request, response: Response) => {
+            if(serverQuery.status !== SimulationStatus.INITIAL) {
+                serverService.setStatus(SimulationStatus.INITIAL);
+                simulationService.stopSimulation();
+                response.status(200).json({status: "ok"});
+            } else {
+                response.status(500).json({status: "error"});
+            }
+        });
+    }
+
+    public registerPUTPauseSimulation(): void {
+        this.put("manage/pause", (request: Request, response: Response) => {
+            if(serverQuery.status === SimulationStatus.STARTED) {
+                serverService.setStatus(SimulationStatus.PAUSED);
+                simulationService.pauseSimulation();
+                response.status(200).json({status: "ok"});
+            } else {
+                response.status(500).json({status: "error"});
+            }
+        });
+    }
+
+
+    public registerPUTResumeSimulation(): void {
+        this.put("manage/pause", (request: Request, response: Response) => {
+            if(serverQuery.status === SimulationStatus.PAUSED) {
+                serverService.setStatus(SimulationStatus.STARTED);
+                simulationService.resumeSimulation();
                 response.status(200).json({status: "ok"});
             } else {
                 response.status(500).json({status: "error"});
