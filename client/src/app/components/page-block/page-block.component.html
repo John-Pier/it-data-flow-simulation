@@ -1,4 +1,7 @@
-<div class="dfs-page-block__title">{{title}}</div>
+<div class="dfs-page-block__header">
+    <div class="dfs-page-block__title">{{title}}</div>
+    <ng-template [ngTemplateOutlet]="rightTemplate"></ng-template>
+</div>
 <div class="dfs-page-block__inner">
     <ng-content></ng-content>
 </div>

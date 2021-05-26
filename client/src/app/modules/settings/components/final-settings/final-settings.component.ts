@@ -74,4 +74,8 @@ export class DFSFinalSettingsComponent implements OnInit {
     public _trackValuesById(index: number, value: DFSDistributionValue): string {
         return value.value;
     }
+
+    public _onSaveSettingClick(): void {
+        //
+    }
 }

@@ -1,3 +1,6 @@
+<div class="dfs-settings__header">
+    <div class="dfs-settings__header-title">Настройка симуляции</div>
+</div>
 <ng-container *ngIf="_settingsConfig$ | async as settingsConfig">
     <dfs-page-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
                     [class._invisible]="!block.active"

@@ -1,3 +1,11 @@
+<div class="dfs-settings__header">
+    <div class="dfs-settings__header-title">Итоговые настройки</div>
+    <button mat-raised-button
+            color="accent"
+            (click)="_onSaveSettingClick()">
+        Сохранить настройки
+    </button>
+</div>
 <ng-container *ngIf="_settingsConfig$ | async as settingsConfig">
     <dfs-page-block *ngFor="let block of settingsConfig; trackBy: _trackSettingsConfigById"
                     [class._invisible]="!block.active"
@@ -178,7 +186,7 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
-                        <mat-label>Доработка дизайна требуется в </mat-label>
+                        <mat-label>Доработка дизайна требуется в</mat-label>
                         <input matInput
                                type="number"
                                placeholder="Процент доработок дизайна"
