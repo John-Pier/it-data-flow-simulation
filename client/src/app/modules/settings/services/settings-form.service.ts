@@ -152,7 +152,7 @@ export class DFSSettingsFormService {
                 ),
             formGroups.supportForm.statusChanges
                 .pipe(
-                    startWith(formGroups.supportForm.status)
+                    startWith(this.query.getValue().settingsConfig.find(value => value.template === "supportSettings" && value.active) ? formGroups.supportForm.status : "VALID")
                 ),
             formGroups.responseCustomerForm.statusChanges
                 .pipe(
@@ -164,7 +164,7 @@ export class DFSSettingsFormService {
                 ),
             formGroups.designForm.statusChanges
                 .pipe(
-                    startWith(formGroups.designForm.status)
+                    startWith(startWith(this.query.getValue().settingsConfig.find(value => value.template === "designersSettings" && value.active) ? formGroups.designForm.status : "VALID"))
                 ),
             formGroups.processingTimeForm.statusChanges
                 .pipe(
@@ -197,7 +197,6 @@ export class DFSSettingsFormService {
     }
 
     public getRequestSettingsFormGroups(): RequestSettingsFormGroups {
-
         return {
             requestForm: new FormGroup({
                 distribution: new FormControl(this.query.getValue().settings.requestDistribution?.type, [this.getRequiredValidatorFunction("requestManualControl")]),

@@ -70,7 +70,6 @@ export class ManageController extends AbstractController {
         });
     }
 
-
     public registerPUTResumeSimulation(): void {
         this.put("manage/pause", (request: Request, response: Response) => {
             if(serverQuery.status === SimulationStatus.PAUSED) {

@@ -98,9 +98,6 @@
                                         [value]="value.type">
                                 {{value.value}}
                             </mat-option>
-                            <mat-option [value]="null">
-                                -
-                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </form>
@@ -122,16 +119,13 @@
                                         [value]="value.type">
                                 {{value.value}}
                             </mat-option>
-                            <mat-option [value]="null">
-                                -
-                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>Процент заявок с дизайном</mat-label>
                         <input matInput
-                               type="number"
                                [disabled]="true"
+                               type="number"
                                placeholder="Процент заявок с дизайном"
                                formControlName="designNeededPercent">
                         <span matSuffix>&nbsp; %</span>
@@ -165,9 +159,6 @@
                                         [value]="value.type">
                                 {{value.value}}
                             </mat-option>
-                            <mat-option [value]="null">
-                                -
-                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -180,9 +171,6 @@
                             <mat-option *ngFor="let value of _distributionsValues; trackBy: _trackValuesById"
                                         [value]="value.type">
                                 {{value.value}}
-                            </mat-option>
-                            <mat-option [value]="null">
-                                -
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
