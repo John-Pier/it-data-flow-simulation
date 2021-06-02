@@ -25,7 +25,7 @@ export function createInitialState(): ServerState {
         simulationStatus: SimulationStatus.INITIAL,
         state: {
             isRequestPreparing: false,
-            currentRequest: 1,
+            currentRequest: 0,
             finalProjectCount: 0,
             modelTimeInMinutes: 0,
             // fullRequestCount: 0

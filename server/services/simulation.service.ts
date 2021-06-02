@@ -1,5 +1,5 @@
-import {iif, Observable, of, Subject} from "rxjs";
-import {delay, skipWhile, switchMap, takeWhile, tap} from "rxjs/operators";
+import {iif, merge, Observable, of, Subject} from "rxjs";
+import {delay, filter, first, skipWhile, switchMap, takeWhile, tap} from "rxjs/operators";
 import {DepartmentsType} from "../../client/src/app/core/models/departments.type";
 import {DFSDistribution, DFSDistributionEntity} from "../../client/src/app/core/models/distributions.type";
 import {DFSSettings} from "../../client/src/app/core/models/settings.type";
@@ -22,9 +22,10 @@ export class SimulationService {
     public manageStream$: Observable<any>;
     public developersStream$: Observable<any>;
     public designersStream$: Observable<any>;
+    public branchingAfterManageStream$: Observable<any>;
 
-    private requestStream: Subject<number>;
     private supportRequestStream: Subject<number>;
+    private branchingDesignRequestStream: Subject<{ value: number }>;
 
     private processingTimeDistribution: AbstractDistribution;
     private requestTimeDistribution: AbstractDistribution;
@@ -40,7 +41,6 @@ export class SimulationService {
     }
 
     public startSimulation(settings: DFSSettings): void {
-        this.requestStream = new Subject<number>();
         this.supportRequestStream = new Subject<number>();
 
         this.requestDistribution = this.getDistribution(settings.requestDistribution);
@@ -52,12 +52,16 @@ export class SimulationService {
         this.responseCustomerDistribution = this.getDistribution(settings.responseCustomerDistribution);
 
         const isDesignAvailable = settings.departments.includes(DepartmentsType.DESIGNERS);
+        const isSupportAvailable = settings.departments.includes(DepartmentsType.SUPPORT)
 
         // Поток заявок
-        this.request$ = this.requestStream.asObservable()
+        this.request$ = serverQuery.select(store => store.state.currentRequest)
             .pipe(
+                filter(value => value && serverQuery.status === SimulationStatus.STARTED),
+                takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+
                 // Учесть, что в системе уже может быть заявка
-                skipWhile(() => serverQuery.state.isRequestPreparing),
+                filter(() => !serverQuery.state.isRequestPreparing),
                 tap(() => {
                     serverService.updateState(() => {
                         return {
@@ -68,6 +72,7 @@ export class SimulationService {
                     if (this.requestDistribution && serverQuery.status === SimulationStatus.STARTED) {
                         // Очистить
                         const timer = setTimeout(() => {
+                            // Генерация заявок
                             this.upRequestCount();
                         }, this.requestDistribution.getValue());
                     }
@@ -87,44 +92,49 @@ export class SimulationService {
             );
 
         // use iif
+        if (isDesignAvailable) {
+            this.branchingDesignRequestStream = new Subject<{ value: number }>();
 
-        if(isDesignAvailable) {
             this.designersStream$ = this.manageStream$
                 .pipe(
                     switchMap(value => {
-                        return this.getDelayStream(this.designCostsDistribution.getValue(), value);
+                        return merge([
+                            this.getDelayStream(this.designCostsDistribution.getValue(), value),
+                            this.branchingDesignRequestStream.asObservable()
+                        ]);
                     }),
                     switchMap(value => {
                         return this.getDelayStream(this.responseCustomerDistribution.getValue(), {
                             ...value,
                             isRevisionNeeded: this.percentDistribution.getValue() < settings.revisionProbability
                         });
-                    }),
+                    })
                 );
 
-            this.designersStream$
+            this.branchingAfterManageStream$ = this.designersStream$
                 .pipe(
                     switchMap(value => {
                         return iif(
                             () => value.isRevisionNeeded,
-                            of(value)
+                            this.getDelayStream(this.revisionTimeDistribution.getValue(), value)
                                 .pipe(
-                                    switchMap(value => {
-                                        return this.getDelayStream(this.revisionTimeDistribution.getValue(), value);
+                                    tap(value => {
+                                        this.branchingDesignRequestStream.next(value);
                                     }),
+                                    // filter(() =>!value.isRevisionNeeded)
+                                    first()
+                                    // Memory leak check
                                 ),
                             of(value),
                         )
                     })
                 )
+        } else {
+            this.branchingAfterManageStream$ = this.manageStream$;
         }
 
         // Поток отдела разработки
-        this.developersStream$ = (
-            isDesignAvailable
-                ? this.designersStream$
-                : this.manageStream$
-        )
+        this.developersStream$ = this.branchingAfterManageStream$
             .pipe(
                 switchMap(value => {
                     return this.getDelayStream(this.developCostsDistribution.getValue(), {
@@ -142,32 +152,34 @@ export class SimulationService {
                 })
             );
 
-        this.supportRequest$ =
-            settings.departments.includes(DepartmentsType.SUPPORT) &&
-            this.supportRequestStream.asObservable()
-                .pipe();
-
-        serverQuery.select(store => store.state.currentRequest)
-            .pipe(
-                takeWhile(() => serverQuery.status === SimulationStatus.STARTED)
-            )
-            .subscribe(value => this.requestStream.next(value));
+        if (isSupportAvailable) {
+            this.supportRequest$ = serverQuery.select(store => store.state.finalProjectCount > 0)
+                .pipe(
+                    skipWhile(value => !value),
+                    first(),
+                    switchMap(() => {
+                        return this.supportRequestStream.asObservable();
+                    }),
+                    filter(() => serverQuery.status === SimulationStatus.STARTED),
+                    takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+                );
+        }
 
         // Start stream
-        this.requestStream.next(serverQuery.state.currentRequest);
+        this.upRequestCount();
     }
 
     public stopSimulation(): void {
-        this.requestStream.complete();
-        this.supportRequestStream.complete();
+        serverService.setStatus(SimulationStatus.INITIAL);
+        //this.supportRequestStream.complete();
     }
 
     public pauseSimulation(): void {
-
+        serverService.setStatus(SimulationStatus.PAUSED);
     }
 
     public resumeSimulation(): void {
-
+        serverService.setStatus(SimulationStatus.STARTED);
     }
 
     public generateRequest(): void {
@@ -183,15 +195,6 @@ export class SimulationService {
     private getDelayStream<T = any>(delayValue: number, value: T): Observable<T> {
         return of(value).pipe(delay(delayValue));
     }
-
-    // private startNumberTimer(stream: Subject<any>, value: number, distribution: AbstractDistribution): NodeJS.Timeout {
-    //     return setTimeout(() => {
-    //         if (serverQuery.status === SimulationStatus.STARTED) {
-    //             stream.next(value);
-    //             this.startNumberTimer(stream, ++value, distribution);
-    //         }
-    //     }, distribution.getValue());
-    // }
 
     private getDistribution(distributionEntity: DFSDistributionEntity): AbstractDistribution {
         switch (distributionEntity.type) {
