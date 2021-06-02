@@ -15,6 +15,10 @@ export class ServerQuery extends Query<ServerState>{
     get status(): SimulationStatus {
         return this.getValue().simulationStatus;
     }
+
+    get state(): SimulationState {
+        return this.getValue().state;
+    }
 }
 
 export const serverQuery: ServerQuery = new ServerQuery(serverStore);

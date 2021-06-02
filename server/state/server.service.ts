@@ -1,6 +1,7 @@
+import {UpdateStateCallback} from "@datorama/akita";
 import {DFSSettings} from "../../client/src/app/core/models/settings.type";
 import {serverQuery, ServerQuery} from "./server.query";
-import {SimulationStatus} from "./server.state";
+import {SimulationState, SimulationStatus} from "./server.state";
 import {serverStore, ServerStore} from "./server.store";
 
 export class ServerService {
@@ -12,7 +13,7 @@ export class ServerService {
         this.store.update(() => {
             return {
                 currentSettings: settings,
-                state: SimulationStatus.STARTED
+                simulationStatus: SimulationStatus.STARTED
             }
         });
     }
@@ -20,8 +21,19 @@ export class ServerService {
     public setStatus(status: SimulationStatus): void {
         this.store.update(() => {
             return {
-                state: status
+                simulationStatus: status
             }
+        });
+    }
+
+    public updateState(updateStateCallback: UpdateStateCallback<SimulationState>): void {
+        this.store.update(store => {
+            return {
+                state: {
+                    ...store.state,
+                    ...updateStateCallback(store.state)
+                }
+            };
         });
     }
 }
