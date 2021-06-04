@@ -34,6 +34,7 @@ export class SimulationService {
     private designCostsDistribution: AbstractDistribution;
     private revisionTimeDistribution: AbstractDistribution;
     private responseCustomerDistribution: AbstractDistribution;
+    private supportProcessingTimeDistribution: AbstractDistribution;
 
     private percentDistribution: UniformDistribution = new UniformDistribution(0, 100);
 
@@ -41,6 +42,37 @@ export class SimulationService {
     }
 
     public startSimulation(settings: DFSSettings): void {
+        this.setupStreams(settings);
+
+        // TODO: генерация заявок
+        // Start stream
+        this.upRequestCount();
+    }
+
+    public stopSimulation(): void {
+        serverService.setStatus(SimulationStatus.INITIAL);
+        //this.supportRequestStream.complete();
+    }
+
+    public pauseSimulation(): void {
+        serverService.setStatus(SimulationStatus.PAUSED);
+    }
+
+    public resumeSimulation(): void {
+        serverService.setStatus(SimulationStatus.STARTED);
+    }
+
+    public generateRequest(): void {
+        this.upRequestCount();
+    }
+
+    public generateSupportRequest(): void {
+        if (serverQuery.state.finalProjectCount > 0) {
+            this.supportRequestStream.next();
+        }
+    }
+
+    private setupStreams(settings: DFSSettings): void {
         this.supportRequestStream = new Subject<number>();
 
         this.requestDistribution = this.getDistribution(settings.requestDistribution);
@@ -52,7 +84,7 @@ export class SimulationService {
         this.responseCustomerDistribution = this.getDistribution(settings.responseCustomerDistribution);
 
         const isDesignAvailable = settings.departments.includes(DepartmentsType.DESIGNERS);
-        const isSupportAvailable = settings.departments.includes(DepartmentsType.SUPPORT)
+        const isSupportAvailable = settings.departments.includes(DepartmentsType.SUPPORT);
 
         // Поток заявок
         this.request$ = serverQuery.select(store => store.state.currentRequest)
@@ -91,7 +123,6 @@ export class SimulationService {
                 })
             );
 
-        // use iif
         if (isDesignAvailable) {
             this.branchingDesignRequestStream = new Subject<{ value: number }>();
 
@@ -162,33 +193,12 @@ export class SimulationService {
                     }),
                     filter(() => serverQuery.status === SimulationStatus.STARTED),
                     takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+                    switchMap(() => {
+                        return this.getDelayStream(this.supportProcessingTimeDistribution.getValue(), {
+                            count: Math.random()
+                        })
+                    })
                 );
-        }
-
-        // Start stream
-        this.upRequestCount();
-    }
-
-    public stopSimulation(): void {
-        serverService.setStatus(SimulationStatus.INITIAL);
-        //this.supportRequestStream.complete();
-    }
-
-    public pauseSimulation(): void {
-        serverService.setStatus(SimulationStatus.PAUSED);
-    }
-
-    public resumeSimulation(): void {
-        serverService.setStatus(SimulationStatus.STARTED);
-    }
-
-    public generateRequest(): void {
-        this.upRequestCount();
-    }
-
-    public generateSupportRequest(): void {
-        if (serverQuery.state.finalProjectCount > 0) {
-            this.supportRequestStream.next();
         }
     }
 
