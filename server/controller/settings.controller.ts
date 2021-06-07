@@ -17,7 +17,7 @@ export class SettingsController extends AbstractController {
             const settings: DFSSettings = request.body;
             if(serverQuery.status === SimulationStatus.INITIAL) {
                 serverService.setupSettings(settings);
-                simulationService.startSimulation(settings);
+                simulationService.startSimulation();
                 response.status(200).json();
             }
             response.status(500).json();

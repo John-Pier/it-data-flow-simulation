@@ -1,4 +1,3 @@
-import {max} from "rxjs/operators";
 import {AbstractDistribution} from "./abstract.distribution";
 
 export class UniformDistribution extends AbstractDistribution {

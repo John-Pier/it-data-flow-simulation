@@ -8,6 +8,8 @@ import {serverService} from "../state/server.service";
 import {SimulationStatus} from "../state/server.state";
 import {AbstractDistribution} from "./distributions/abstract.distribution";
 import {DetermineDistribution} from "./distributions/determine.distribution";
+import {ExponentialDistribution} from "./distributions/exponential.distribution";
+import {NormalDistribution} from "./distributions/normal.distribution";
 import {UniformDistribution} from "./distributions/uniform.distribution";
 
 export const defaultSimulationParams = {
@@ -38,20 +40,36 @@ export class SimulationService {
 
     private percentDistribution: UniformDistribution = new UniformDistribution(0, 100);
 
-    constructor() {
-    }
+    public startSimulation(): void {
+        this.setupStreams();
 
-    public startSimulation(settings: DFSSettings): void {
-        this.setupStreams(settings);
-
-        // TODO: генерация заявок
-        // Start stream
+        // Start streams
         this.upRequestCount();
+
+        serverQuery.select(store => store.state.finalProjectCount > 0)
+            .pipe(
+                takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+                filter(() => serverQuery.status === SimulationStatus.STARTED),
+                skipWhile(value => !value),
+                first(),
+            )
+            .subscribe();
+
+        this.developersStream$
+            .subscribe();
+
+        if(this.supportRequest$) {
+            this.supportRequest$
+                .subscribe(value => {
+                    this.setStatistic(value);
+                })
+        }
+
+        this.subscribeToGetDepartmentStatistic();
     }
 
     public stopSimulation(): void {
         serverService.setStatus(SimulationStatus.INITIAL);
-        //this.supportRequestStream.complete();
     }
 
     public pauseSimulation(): void {
@@ -72,7 +90,8 @@ export class SimulationService {
         }
     }
 
-    private setupStreams(settings: DFSSettings): void {
+    private setupStreams(): void {
+        const settings = serverQuery.settings;
         this.supportRequestStream = new Subject<number>();
 
         this.requestDistribution = this.getDistribution(settings.requestDistribution);
@@ -89,8 +108,8 @@ export class SimulationService {
         // Поток заявок
         this.request$ = serverQuery.select(store => store.state.currentRequest)
             .pipe(
-                filter(value => value && serverQuery.status === SimulationStatus.STARTED),
                 takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+                filter(value => value && serverQuery.status === SimulationStatus.STARTED),
 
                 // Учесть, что в системе уже может быть заявка
                 filter(() => !serverQuery.state.isRequestPreparing),
@@ -102,8 +121,7 @@ export class SimulationService {
                     });
 
                     if (this.requestDistribution && serverQuery.status === SimulationStatus.STARTED) {
-                        // Очистить
-                        const timer = setTimeout(() => {
+                        setTimeout(() => {
                             // Генерация заявок
                             this.upRequestCount();
                         }, this.requestDistribution.getValue());
@@ -115,7 +133,7 @@ export class SimulationService {
         this.manageStream$ = this.request$
             .pipe(
                 switchMap(value => {
-                    return this.getDelayStream(this.requestTimeDistribution.getValue(), {
+                    return this.getDelayStream(this.responseCustomerDistribution.getValue(), {
                             requestCount: value,
                             isDesignNeeded: this.percentDistribution.getValue() <= settings.designNeededPercent
                         }
@@ -126,11 +144,12 @@ export class SimulationService {
         if (isDesignAvailable) {
             this.branchingDesignRequestStream = new Subject<{ value: number }>();
 
+            // Поток отдела дизайна
             this.designersStream$ = this.manageStream$
                 .pipe(
                     switchMap(value => {
                         return merge([
-                            this.getDelayStream(this.designCostsDistribution.getValue(), value),
+                            this.getDelayStream(this.getWorkingTime(this.designCostsDistribution, settings.designerWorkersCount), value),
                             this.branchingDesignRequestStream.asObservable()
                         ]);
                     }),
@@ -142,6 +161,7 @@ export class SimulationService {
                     })
                 );
 
+            // Поток условия разветвления
             this.branchingAfterManageStream$ = this.designersStream$
                 .pipe(
                     switchMap(value => {
@@ -152,9 +172,7 @@ export class SimulationService {
                                     tap(value => {
                                         this.branchingDesignRequestStream.next(value);
                                     }),
-                                    // filter(() =>!value.isRevisionNeeded)
                                     first()
-                                    // Memory leak check
                                 ),
                             of(value),
                         )
@@ -168,7 +186,7 @@ export class SimulationService {
         this.developersStream$ = this.branchingAfterManageStream$
             .pipe(
                 switchMap(value => {
-                    return this.getDelayStream(this.developCostsDistribution.getValue(), {
+                    return this.getDelayStream(this.getWorkingTime(this.developCostsDistribution, settings.developerWorkersCount), {
                             requestCount: value.currentRequest
                         }
                     );
@@ -183,20 +201,24 @@ export class SimulationService {
                 })
             );
 
+        // Поток отдела поддержки
         if (isSupportAvailable) {
-            this.supportRequest$ = serverQuery.select(store => store.state.finalProjectCount > 0)
+            this.supportRequest$ = this.supportRequestStream.asObservable()
                 .pipe(
-                    skipWhile(value => !value),
-                    first(),
-                    switchMap(() => {
-                        return this.supportRequestStream.asObservable();
-                    }),
-                    filter(() => serverQuery.status === SimulationStatus.STARTED),
                     takeWhile(() => serverQuery.status !== SimulationStatus.INITIAL),
+                    filter(() => serverQuery.status === SimulationStatus.STARTED),
+                    tap(() => {
+                        if (this.requestTimeDistribution && serverQuery.status === SimulationStatus.STARTED) {
+                            setTimeout(() => {
+                                // Генерация заявок
+                                this.supportRequestStream.next();
+                            }, this.requestTimeDistribution.getValue());
+                        }
+                    }),
                     switchMap(() => {
-                        return this.getDelayStream(this.supportProcessingTimeDistribution.getValue(), {
-                            count: Math.random()
-                        })
+                        return this.getDelayStream(
+                            this.getWorkingTime(this.supportProcessingTimeDistribution, settings.supportWorkersCount), {}
+                        );
                     })
                 );
         }
@@ -214,9 +236,11 @@ export class SimulationService {
                     distributionEntity.max
                 );
             case DFSDistribution.NORMAL:
-                return null;
+                return new NormalDistribution(
+                    distributionEntity.value, distributionEntity.variance
+                );
             case DFSDistribution.EXPONENTIAL:
-                return null;
+                return new ExponentialDistribution(distributionEntity.value);
             case null:
                 return null;
             case DFSDistribution.DETERMINISTIC:
@@ -233,6 +257,18 @@ export class SimulationService {
                 currentRequest: state.currentRequest + 1
             }
         });
+    }
+
+    private getWorkingTime(distribution: AbstractDistribution, countOfWorkers): number {
+        return distribution.getValue() / countOfWorkers;
+    }
+
+    private setStatistic(value: any): void {
+        // TODO: implement
+    }
+
+    private subscribeToGetDepartmentStatistic(): void {
+        // TODO: implement
     }
 }
 

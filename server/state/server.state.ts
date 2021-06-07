@@ -11,7 +11,7 @@ export type SimulationState = Readonly<{
     modelTimeInMinutes: number;
     currentRequest: number;
     finalProjectCount: number;
-    // fullRequestCount: number
+    supportedRequestCount: number;
 }>;
 
 export enum SimulationStatus {
@@ -28,7 +28,7 @@ export function createInitialState(): ServerState {
             currentRequest: 0,
             finalProjectCount: 0,
             modelTimeInMinutes: 0,
-            // fullRequestCount: 0
+            supportedRequestCount: 0
         },
         currentSettings: null
     };
