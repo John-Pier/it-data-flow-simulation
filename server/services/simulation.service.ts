@@ -2,7 +2,6 @@ import {iif, merge, Observable, of, Subject} from "rxjs";
 import {delay, filter, first, skipWhile, switchMap, takeWhile, tap} from "rxjs/operators";
 import {DepartmentsType} from "../../client/src/app/core/models/departments.type";
 import {DFSDistribution, DFSDistributionEntity} from "../../client/src/app/core/models/distributions.type";
-import {DFSSettings} from "../../client/src/app/core/models/settings.type";
 import {serverQuery} from "../state/server.query";
 import {serverService} from "../state/server.service";
 import {SimulationStatus} from "../state/server.state";
